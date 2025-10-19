@@ -1,0 +1,228 @@
+{
+  "publishers": [
+    { "name": "Choiseul" },
+    { "name": "BOP" },
+    { "name": "Tillbooks" }
+  ],
+  "authors": [
+    { "surname": "Camus", "firstname": "Albert" },
+    { "surname": "Sartre", "firstname": "Jean-Paul" },
+    { "surname": "Faulkner", "firstname": "William" },
+    { "surname": "De Ségur", "firstname": "La Contesse" },
+    { "surname": "Elroy", "firstname": "James" },
+    { "surname": "Hugo", "firstname": "Victor" }
+  ],
+  "books": [
+    { "title": "L'Étranger", "publisher": { "name": "Choiseul" } },
+    { "title": "La Nausée", "publisher": { "name": "BOP" } },
+    { "title": "Les malheurs de Sophie", "publisher": { "name": "BOP" } },
+    { "title": "Tandis que j'agonise", "publisher": { "name": "Tillbooks" } },
+    { "title": "Les mains sales", "publisher": { "name": "Choiseul" } },
+    { "title": "Les misérables", "publisher": { "name": "BOP" } },
+    { "title": "93", "publisher": { "name": "BOP" } },
+    { "title": "Le grand nulle part", "publisher": { "name": "Tillbooks" } }
+  ],
+  "publishings": [
+    {
+      "name": "Édition poche",
+      "isbn": "9782070360024",
+      "noTprice": 8.50,
+      "royalties": 0.10,
+      "book": { "title": "L'Étranger" }
+    },
+    {
+      "name": "Édition poche",
+      "isbn": "9782077360036",
+      "noTprice": 15.90,
+      "royalties": 0.12,
+      "book": { "title": "Les mains sales" }
+    },
+    {
+      "name": "Édition poche",
+      "isbn": "9782077360039",
+      "noTprice": 18.00,
+      "royalties": 0.95,
+      "book": { "title": "Le grand nulle part" }
+    },
+    {
+      "name": "Édition Collector",
+      "isbn": "9782077560036",
+      "noTprice": 16.00,
+      "royalties": 0.86,
+      "book": { "title": "Les misérables" }
+    },
+    {
+      "name": "Édition Collector",
+      "isbn": "9782077560046",
+      "noTprice": 16.00,
+      "royalties": 0.86,
+      "book": { "title": "93" }
+    },
+    {
+      "name": "Édition collector",
+      "isbn": "9782070360015",
+      "noTprice": 5.50,
+      "royalties": 0.8,
+      "book": { "title": "Les malheurs de Sophie" }
+    },
+    {
+      "name": "Édition poche",
+      "isbn": "9782070360036",
+      "noTprice": 9.50,
+      "royalties": 11.55,
+      "book": { "title": "Tandis que j'agonise" }
+    },
+    {
+      "name": "Édition collector",
+      "isbn": "9782020301527",
+      "noTprice": 15.90,
+      "royalties": 0.12,
+      "book": { "title": "La Nausée" }
+    }
+  ],
+  "authorParticipations": [
+    {
+      "pct_rate_royalties": 1.0,
+      "author": { "surname": "Camus", "firstname": "Albert" },
+      "book": { "title": "L'Étranger" }
+    },
+    {
+      "pct_rate_royalties": 1.0,
+      "author": { "surname": "Sartre", "firstname": "Jean-Paul" },
+      "book": { "title": "La Nausée" }
+    },
+    {
+      "pct_rate_royalties": 1.0,
+      "author": { "surname": "Sartre", "firstname": "Jean-Paul" },
+      "book": { "title": "Les mains sales" }
+    },
+    {
+      "pct_rate_royalties": 1.0,
+      "author": { "surname": "Hugo", "firstname": "Victor" },
+      "book": { "title": "Les misérables" }
+    },
+    {
+      "pct_rate_royalties": 1.0,
+      "author": { "surname": "Hugo", "firstname": "Victor" },
+      "book": { "title": "93" }
+    },
+    {
+      "pct_rate_royalties": 1.0,
+      "author": { "surname": "Elroy", "firstname": "James" },
+      "book": { "title": "Le grand nulle part" }
+    },
+    {
+      "pct_rate_royalties": 1.0,
+      "author": { "surname": "De Ségur", "firstname": "La Contesse" },
+      "book": { "title": "Les malheurs de Sophie" }
+    },
+    {
+      "pct_rate_royalties": 1.5,
+      "author": { "surname": "Faulkner", "firstname": "William" },
+      "book": { "title": "Tandis que j'agonise" }
+    }
+  ],
+  "monthlySales": [
+    {
+      "year": 2024,
+      "month": 1,
+      "quantitySold": 120,
+      "quantityReturn": 5,
+      "averageDiscount": 0.05,
+      "publishing": { "isbn": "9782070360024" }
+    },
+    {
+      "year": 2024,
+      "month": 1,
+      "quantitySold": 188,
+      "quantityReturn": 7,
+      "averageDiscount": 0.05,
+      "publishing": { "isbn": "9782077360086" }
+    },
+    {
+      "year": 2024,
+      "month": 2,
+      "quantitySold": 300,
+      "quantityReturn": 12,
+      "averageDiscount": 0.05,
+      "publishing": { "isbn": "9782077360039" }
+    },
+    {
+      "year": 2024,
+      "month": 1,
+      "quantitySold": 312,
+      "quantityReturn": 5,
+      "averageDiscount": 0.05,
+      "publishing": { "isbn": "9782077560046" }
+    },
+    {
+      "year": 2024,
+      "month": 5,
+      "quantitySold": 87,
+      "quantityReturn": 2,
+      "averageDiscount": 0.05,
+      "publishing": { "isbn": "9782070360036" }
+    },
+    {
+      "year": 2024,
+      "month": 2,
+      "quantitySold": 95,
+      "quantityReturn": 3,
+      "averageDiscount": 0.07,
+      "publishing": { "isbn": "9782070360015" }
+    },
+    {
+      "year": 2024,
+      "month": 9,
+      "quantitySold": 250,
+      "quantityReturn": 12,
+      "averageDiscount": 0.07,
+      "publishing": { "isbn": "9782020301527" }
+    },
+    {
+      "year": 2023,
+      "month": 3,
+      "quantitySold": 1000,
+      "quantityReturn": 50,
+      "averageDiscount": 0.10,
+      "publishing": { "isbn": "9782070360024" }
+    }
+  ],
+  "bookSales": [
+    {
+      "year": 2024,
+      "month": 1,
+      "quantitySold": 150,
+      "quantityReturn": 3,
+      "averageDiscount": 0.04,
+      "publishing": { "isbn": "9782070360024" }
+    },
+    {
+      "year": 2024,
+      "month": 2,
+      "quantitySold": 200,
+      "quantityReturn": 8,
+      "averageDiscount": 0.06,
+      "publishing": { "isbn": "9782077360059" }
+    },
+    {
+      "year": 2024,
+      "month": 3,
+      "quantitySold": 120,
+      "quantityReturn": 2,
+      "averageDiscount": 0.05,
+      "publishing": { "isbn": "9782077560036" }
+    }
+  ],
+  "users": [
+    { "login": "admin", "password": "admin123", "role": "ADMIN", "author": null },
+    { "login": "acamus", "password": "secret", "role": "AUTHOR", "author": { "surname": "Camus", "firstname": "Albert" } },
+    { "login": "jsartre", "password": "existence", "role": "AUTHOR", "author": { "surname": "Sartre", "firstname": "Jean-Paul" } },
+    { "login": "cdesegur", "password": "sophie", "role": "AUTHOR", "author": { "surname": "De Ségur", "firstname": "La Contesse" } },
+    { "login": "wfaulkner", "password": "requiem", "role": "AUTHOR", "author": { "surname": "Faulkner", "firstname": "William" } },
+    { "login": "vhugo", "password": "causette", "role": "AUTHOR", "author": { "surname": "Hugo", "firstname": "Victor" } },
+    { "login": "jelroy", "password": "dahlia", "role": "AUTHOR", "author": { "surname": "Elroy", "firstname": "James" } },
+    { "login": "useruser", "password": "12345", "role": "USER", "author": null },
+    { "login": "mgr1", "password": "12345", "role": "MANAGER", "author": null }
+  ]
+}
