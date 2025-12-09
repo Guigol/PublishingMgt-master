@@ -24,8 +24,8 @@ public class RoyaltyController {
     private final ObjectMapper mapper = new ObjectMapper();
 
     /**
-     * ✅ Accessible uniquement à un auteur :
-     * retourne ses propres redevances.
+     *  Royalties author's only :
+     * return his own royalties.
      */
     @PreAuthorize("hasRole('AUTHOR')")
     @GetMapping("/mine")

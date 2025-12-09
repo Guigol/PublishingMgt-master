@@ -20,7 +20,9 @@
     { "title": "Les mains sales", "publisher": { "name": "Choiseul" } },
     { "title": "Les misérables", "publisher": { "name": "BOP" } },
     { "title": "93", "publisher": { "name": "BOP" } },
-    { "title": "Le grand nulle part", "publisher": { "name": "Tillbooks" } }
+    { "title": "Notre Dame de Paris", "publisher": { "name": "BOP" } },
+    { "title": "Le grand nulle part", "publisher": { "name": "Tillbooks" } },
+    { "title": "Le Dahlia noir", "publisher": { "name": "Tillbooks" } }
   ],
   "publishings": [
     {
@@ -46,6 +48,13 @@
     },
     {
       "name": "Édition Collector",
+      "isbn": "9782077360059",
+      "noTprice": 45.00,
+      "royalties": 0.95,
+      "book": { "title": "Le Dahlia noir" }
+    },
+    {
+      "name": "Édition Collector",
       "isbn": "9782077560036",
       "noTprice": 16.00,
       "royalties": 0.86,
@@ -59,6 +68,13 @@
       "book": { "title": "93" }
     },
     {
+      "name": "Édition Collector",
+      "isbn": "9782077360086",
+      "noTprice": 18.00,
+      "royalties": 0.86,
+      "book": { "title": "Notre Dame de Paris" }
+    },
+    {
       "name": "Édition collector",
       "isbn": "9782070360015",
       "noTprice": 5.50,
@@ -69,7 +85,7 @@
       "name": "Édition poche",
       "isbn": "9782070360036",
       "noTprice": 9.50,
-      "royalties": 11.55,
+      "royalties": 0.55,
       "book": { "title": "Tandis que j'agonise" }
     },
     {
@@ -108,10 +124,15 @@
     },
     {
       "pct_rate_royalties": 1.0,
+      "author": { "surname": "Hugo", "firstname": "Victor" },
+      "book": { "title": "Notre Dame de Paris" }
+    },
+    {
+      "pct_rate_royalties": 1.0,
       "author": { "surname": "Elroy", "firstname": "James" },
       "book": { "title": "Le grand nulle part" }
     },
-    {
+        {
       "pct_rate_royalties": 1.0,
       "author": { "surname": "De Ségur", "firstname": "La Contesse" },
       "book": { "title": "Les malheurs de Sophie" }
@@ -130,6 +151,14 @@
       "quantityReturn": 5,
       "averageDiscount": 0.05,
       "publishing": { "isbn": "9782070360024" }
+    },
+    {
+      "year": 2024,
+      "month": 9,
+      "quantitySold": 187,
+      "quantityReturn": 15,
+      "averageDiscount": 0.0,
+      "publishing": { "isbn": "9782077360059" }
     },
     {
       "year": 2024,
