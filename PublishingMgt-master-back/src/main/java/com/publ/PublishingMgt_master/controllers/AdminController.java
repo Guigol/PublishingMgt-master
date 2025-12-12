@@ -119,6 +119,7 @@ public class AdminController {
 
     // 🔹 GET all books
     @GetMapping("/book")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<List<JsonNode>> getBooks() {
         List<JsonNode> books = bookService.books()
                 .stream()
@@ -129,6 +130,7 @@ public class AdminController {
 
     // 🔹 CREATE book
     @PostMapping("/book")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> createBook(@RequestBody BookRequest bookRequest) {
         try {
             Book saved = bookService.createBook(bookRequest);
@@ -143,6 +145,7 @@ public class AdminController {
 
     // 🔹 UPDATE book by ID
     @PutMapping("/book/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> updateBook(@PathVariable Long id, @RequestBody BookRequest bookRequest) {
         try {
             Book updated = bookService.updateBook(id, bookRequest);
@@ -157,6 +160,7 @@ public class AdminController {
 
     // 🔹 DELETE book by ID
     @DeleteMapping("/book/{id}")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<?> deleteBook(@PathVariable Long id) {
         Book book = bookService.books().stream()
                 .filter(b -> b.getBook_id().equals(id))

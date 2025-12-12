@@ -41,8 +41,8 @@ public class RoyaltyController {
     }
 
     /**
-     * ✅ Accessible aux MANAGER et ADMIN :
-     * permet de consulter les redevances d’un auteur spécifique.
+     * For MANAGER and ADMIN :
+     * return a specific author's'royalties.
      */
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @GetMapping("/by-author/{authorId}")
@@ -57,8 +57,8 @@ public class RoyaltyController {
     }
 
     /**
-     * ✅ Accessible aux MANAGER et ADMIN :
-     * permet de consulter les redevances liées à un livre.
+     * For MANAGER and ADMIN : :
+     * return a specific book's'royalties.
      */
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @GetMapping("/by-book/{bookId}")

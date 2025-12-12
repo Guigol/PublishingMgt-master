@@ -95,8 +95,7 @@ public class AuthService {
     public ResponseEntity<JsonNode> createPubUser(AuthRequest req) {
         ObjectMapper mapper = new ObjectMapper();
 
-        // Validation minimale
-        if (req.getLogin() == null || req.getLogin().isBlank()) {
+         if (req.getLogin() == null || req.getLogin().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(mapper.createObjectNode().put("error", "login is required"));
         }
