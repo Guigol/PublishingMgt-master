@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.publ.PublishingMgt_master.entities.PubUser;
 import com.publ.PublishingMgt_master.repositories.PubUserRepository;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -27,14 +26,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 
-        System.out.println("🔹 [UserDetailsServiceImpl] Recherche utilisateur: " + login);
+      //  System.out.println(" [UserDetailsServiceImpl] Recherche utilisateur: " + login);
 
         PubUser pubUser = repository.findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with login name: " + login));
 
-        System.out.println("✅ [UserDetailsServiceImpl] Trouvé: " + pubUser.getLogin()
-                + " / pass hash = " + pubUser.getPassword()
-                + " / role = " + pubUser.getRole());
+       // System.out.println("[UserDetailsServiceImpl] Trouvé: " + pubUser.getLogin()
+        //        + " / pass hash = " + pubUser.getPassword()
+           //     + " / role = " + pubUser.getRole());
 
 
         return this.mapToUser(pubUser);
@@ -52,18 +51,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     private User mapToUser(PubUser pubUser) {
+        String roleStr = pubUser.getRole().name(); // AUTHOR, MANAGER, ADMIN
+        //System.out.println("[DEBUG] mapToUser role = " + roleStr);
+
         return new User(
                 pubUser.getLogin(),
                 pubUser.getPassword(),
                 true, true, true, true,
-                getAuthorities("ROLE_" + pubUser.getRole())
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + roleStr))
         );
     }
-
-    private Collection<? extends GrantedAuthority> getAuthorities(String role_user) {
-        return Collections.singletonList(new SimpleGrantedAuthority(role_user));
-    }
-
     public PubUser save(PubUser pubUser) {
         return repository.save(pubUser);
     }

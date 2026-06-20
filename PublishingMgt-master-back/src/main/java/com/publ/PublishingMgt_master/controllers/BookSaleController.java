@@ -24,7 +24,7 @@ public class BookSaleController {
     /**
      * List all sales — MANAGER and ADMIN access
      */
-    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN','USER')")
     @GetMapping("/all")
     public ResponseEntity<?> getAllSales() {
         List<BookSales> sales = bookSaleService.getAllSales();
@@ -34,7 +34,7 @@ public class BookSaleController {
     /**
      * List all sales from a given book — MANAGER and ADMIN access
      */
-    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN','USER')")
     @GetMapping("/book/{bookId}")
     public ResponseEntity<?> getSalesByBook(@PathVariable Long bookId) {
         Book book = new Book();

@@ -21,39 +21,39 @@ public class PublisherController {
     private final PublisherService publisherService;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    // 🔹 GET all publishers
+    // GET all publishers
     @GetMapping("/publisher/all")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<List<Publisher>> getAllPublishers() {
         return ResponseEntity.ok(publisherService.findAll());
     }
 
-    // 🔹 GET one publisher by ID
+    // GET one publisher by ID
     @GetMapping("/publisher/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> getPublisherById(@PathVariable Long id) {
         return ResponseEntity.ok(asJson(publisherService.findById(id)));
     }
 
-    // 🔹 CREATE publishing
+    // CREATE publishing
     @PostMapping("/publisher")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> createPublisher(@RequestBody Publisher publisher) {
         Publisher saved = publisherService.create(publisher);
         return ResponseEntity.status(HttpStatus.CREATED).body(asJson(saved));
     }
 
-    // 🔹 UPDATE publisher
+    // UPDATE publisher
     @PutMapping("/publisher/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> updatePublisher(@PathVariable Long id, @RequestBody Publisher publisher) {
         Publisher updated = publisherService.update(id, publisher);
         return ResponseEntity.ok(asJson(updated));
     }
 
-    // 🔹 DELETE publisher
+    // DELETE publisher
     @DeleteMapping("/publisher/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> deletePublisher(@PathVariable Long id) {
         ObjectNode node = mapper.createObjectNode();
         try {
@@ -67,7 +67,7 @@ public class PublisherController {
     }
 
 
-    // 🔹 JSON helper
+    // JSON helper
     private ObjectNode asJson(Publisher publisher) {
         ObjectNode node = mapper.createObjectNode();
         node.put("id", publisher.getPublisher_id());

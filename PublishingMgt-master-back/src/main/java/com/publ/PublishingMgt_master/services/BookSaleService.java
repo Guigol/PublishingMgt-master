@@ -33,30 +33,92 @@ public class BookSaleService {
     }
 
     public BookSales createSale(BookSales sale) {
-        if (sale.getBook() != null && sale.getBook().getBook_id() != null) {
-            Book book = bookRepository.findById(sale.getBook().getBook_id())
-                    .orElseThrow(() -> new RuntimeException("Book not found with id " + sale.getBook().getBook_id()));
-            sale.setBook(book);
+
+        // Check Publishing
+        if (sale.getPublishing() == null ||
+                sale.getPublishing().getIsbn() == null ||
+                sale.getPublishing().getIsbn().isBlank()) {
+
+            throw new RuntimeException("ISBN obligatoire");
         }
 
-        if (sale.getPublishing() != null && sale.getPublishing().getIsbn() != null) {
-            Publishing pub = publishingRepository.findByIsbn(sale.getPublishing().getIsbn())
-                    .orElseThrow(() -> new RuntimeException("Publishing not found with ISBN " + sale.getPublishing().getIsbn()));
-            sale.setPublishing(pub);
+        // Search publishing through ISBN
+        Publishing publishing = publishingRepository
+                .findByIsbn(sale.getPublishing().getIsbn())
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Publishing not found with ISBN : "
+                                        + sale.getPublishing().getIsbn()
+                        )
+                );
+
+        // Business consistency check
+        if (publishing.getBook() == null) {
+            throw new RuntimeException(
+                    "Aucun livre associé à cet ISBN : "
+                            + publishing.getIsbn()
+            );
         }
 
+        // Automatic association
+        sale.setPublishing(publishing);
+        sale.setBook(publishing.getBook());
+
+        // Save
         return bookSalesRepository.save(sale);
     }
 
     public BookSales updateSale(Long id, BookSales updatedSale) {
-        BookSales existing = bookSalesRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vente non trouvée avec l'id : " + id));
 
-        existing.setBook(updatedSale.getBook());
+        // Search existing sale
+        BookSales existing = bookSalesRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Vente non trouvée avec l'id : " + id
+                        )
+                );
+
+        // ISBN presence check
+        if (updatedSale.getPublishing() == null ||
+                updatedSale.getPublishing().getIsbn() == null ||
+                updatedSale.getPublishing().getIsbn().isBlank()) {
+
+            throw new RuntimeException("ISBN obligatoire");
+        }
+
+        // Search for publishing via ISBN
+        Publishing publishing = publishingRepository
+                .findByIsbn(updatedSale.getPublishing().getIsbn())
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Publishing not found with ISBN : "
+                                        + updatedSale.getPublishing().getIsbn()
+                        )
+                );
+
+        // Business consistency check
+        if (publishing.getBook() == null) {
+
+            throw new RuntimeException(
+                    "Aucun livre associé à cet ISBN : "
+                            + publishing.getIsbn()
+            );
+        }
+
+        // Updating business fields
         existing.setMonth(updatedSale.getMonth());
         existing.setYear(updatedSale.getYear());
-        existing.setQuantitySold(updatedSale.getQuantitySold());
 
+        existing.setQuantitySold(updatedSale.getQuantitySold());
+        existing.setQuantityReturn(updatedSale.getQuantityReturn());
+
+        existing.setAverageDiscount(updatedSale.getAverageDiscount());
+
+        // Automatic Book Synchronization <-> Publishing
+        existing.setPublishing(publishing);
+        existing.setBook(publishing.getBook());
+
+        // Save
         return bookSalesRepository.save(existing);
     }
 

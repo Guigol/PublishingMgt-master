@@ -3,6 +3,7 @@ package com.publ.PublishingMgt_master.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.publ.PublishingMgt_master.dtos.AuthRequest;
 import com.publ.PublishingMgt_master.dtos.BookRequest;
+import com.publ.PublishingMgt_master.entities.Author;
 import com.publ.PublishingMgt_master.exceptionErrors.ResourceNotFoundException;
 import com.publ.PublishingMgt_master.entities.Book;
 import com.publ.PublishingMgt_master.exceptionErrors.BookDeletionNotAllowedException;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "http://localhost:3000/api", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
+@CrossOrigin(origins = "http://localhost:4200/api", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 @RestController
 @RequestMapping("/api/tools")
 public class AdminController {
@@ -58,7 +59,7 @@ public class AdminController {
     //PUBUSERS
 
     // get all PubUsers
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/pubuser", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<JsonNode>> pubUser() {
         return ResponseEntity.ok(
@@ -69,7 +70,7 @@ public class AdminController {
     }
 
     // get user by ID
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping(value = "/pubuser/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JsonNode> pubUser(@PathVariable Long id) {
         return pubUserRepository.findById(id)
@@ -81,14 +82,14 @@ public class AdminController {
     // create PubUser rest api
 
     @PostMapping("/pubuser")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Transactional
     public ResponseEntity<JsonNode> createPubUser(@RequestBody AuthRequest req) {
         return authService.createPubUser(req);
     }
 
     // update PubUser rest api
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/pubuser/{id}")
     public ResponseEntity<JsonNode> updatePubUser(@PathVariable Long id, @RequestBody AuthRequest req) {
         return authService.updatePubUser(id, req);
@@ -97,19 +98,33 @@ public class AdminController {
     // delete PubUser rest api
 
     @DeleteMapping("/pubuser/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ResponseEntity<HttpStatus> deletePubUser(@PathVariable Long id) {
-        PubUser pubUser = pubUserRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("PubUser does not exist with id :" + id));
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Void> deletePubUser(@PathVariable Long id) {
 
+        PubUser pubUser = pubUserRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        // retrieve author BEFORE delete
+        Author author = pubUser.getAuthor();
+
+        // break the relation to avoid Hibernate detached error
+        pubUser.setAuthor(null);
+
+        // Deleting the user
         pubUserRepository.delete(pubUser);
+
+        // Deleting the author if exists
+        if (author != null) {
+            authorRepository.deleteById(author.getAuthor_id());
+        }
+
         return ResponseEntity.noContent().build();
     }
-
     // counting users
 
     @GetMapping("/numberOfUsers")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public Integer getNumberOfUsers() {
         return userDetails.getPubUsers().size();
     }
@@ -117,7 +132,7 @@ public class AdminController {
 
     //BOOKS
 
-    // 🔹 GET all books
+    // GET all books
     @GetMapping("/book")
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<List<JsonNode>> getBooks() {
@@ -128,7 +143,7 @@ public class AdminController {
         return ResponseEntity.ok(books);
     }
 
-    // 🔹 CREATE book
+    // CREATE book
     @PostMapping("/book")
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> createBook(@RequestBody BookRequest bookRequest) {
@@ -143,7 +158,7 @@ public class AdminController {
         }
     }
 
-    // 🔹 UPDATE book by ID
+    // UPDATE book by ID
     @PutMapping("/book/{id}")
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> updateBook(@PathVariable Long id, @RequestBody BookRequest bookRequest) {
@@ -158,7 +173,7 @@ public class AdminController {
         }
     }
 
-    // 🔹 DELETE book by ID
+    // DELETE book by ID
     @DeleteMapping("/book/{id}")
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<?> deleteBook(@PathVariable Long id) {
@@ -170,7 +185,7 @@ public class AdminController {
         boolean deleted = bookService.deleteBook(book);
 
         if (!deleted) {
-            // 🔸 response 400 with JSON message
+            // response 400 with JSON message
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "Cannot delete this book because it still has author participations."));
         }

@@ -1,41 +1,50 @@
 package com.publ.PublishingMgt_master.entities;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.Subselect;
 
 @Entity
-@Table(name = "Monthly_Sale")
+@Table(name = "monthly_sale")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Immutable
+@Subselect(
+        "SELECT " +
+                "bs.id AS sale_id, " +
+                "bs.sale_year AS sale_year, " +
+                "bs.sale_month AS sale_month, " +
+                "bs.quantity_sold AS quantity_sold, " +
+                "bs.quantity_return AS quantity_return, " +
+                "bs.average_discount AS average_discount, " +
+                "bs.book_id AS book_id, " +
+                "bs.publishing_id AS publishing_id " +
+                "FROM book_sales bs"
+)
 public class MonthlySale {
 
     @Id
     @Column(name = "SALE_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long saleId;
 
-    @Column(name = "sale_year", nullable = false) // évite le mot réservé
-    private Integer year;
+    @Column(name = "SALE_YEAR")
+    private Integer saleYear;
 
-    @Column(name = "sale_month", nullable = false) // évite le mot réservé
-    private Integer month;
+    @Column(name = "SALE_MONTH")
+    private Integer saleMonth;
 
-    @Column(name = "quantity_sold")
+    @Column(name = "QUANTITY_SOLD")
     private Integer quantitySold;
 
-    @Column(name = "quantity_return")
+    @Column(name = "QUANTITY_RETURN")
     private Integer quantityReturn;
 
-    @Column(name = "average_discount")
+    @Column(name = "AVERAGE_DISCOUNT")
     private Double averageDiscount;
 
-    @ManyToOne
-    @JoinColumn(name = "publishing_id", referencedColumnName = "publishing_id")
-    private Publishing publishing;
+    @Column(name = "BOOK_ID")
+    private Long bookId;
+
+    @Column(name = "PUBLISHING_ID")
+    private Long publishingId;
 }

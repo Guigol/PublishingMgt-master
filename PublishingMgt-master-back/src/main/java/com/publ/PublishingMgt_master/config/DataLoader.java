@@ -34,7 +34,7 @@ public class DataLoader {
             TypeReference<Map<String, Object>> typeRef = new TypeReference<>() {};
             InputStream inputStream = getClass().getResourceAsStream("/seeData.json");
             if (inputStream == null) {
-                System.err.println("⚠️ No seedData.json found in resources !");
+                System.err.println("⚠️ No seeData.json found in resources !");
                 return;
             }
 
@@ -43,8 +43,9 @@ public class DataLoader {
             // =========================
             // 1. Publishers
             // =========================
-            List<Publisher> publishers = mapper.convertValue(jsonData.get("publishers"),
-                    new TypeReference<List<Publisher>>() {});
+            List<Publisher> publishers = Optional.ofNullable(jsonData.get("publishers"))
+                    .map(p -> mapper.convertValue(p, new TypeReference<List<Publisher>>() {}))
+                    .orElse(Collections.emptyList());
             publisherRepository.saveAll(publishers);
             Map<String, Publisher> publisherMap = publishers.stream()
                     .collect(Collectors.toMap(Publisher::getName, p -> p));
@@ -52,22 +53,23 @@ public class DataLoader {
             // =========================
             // 2. Authors
             // =========================
-            List<Author> authors = mapper.convertValue(jsonData.get("authors"),
-                    new TypeReference<List<Author>>() {});
+            List<Author> authors = Optional.ofNullable(jsonData.get("authors"))
+                    .map(a -> mapper.convertValue(a, new TypeReference<List<Author>>() {}))
+                    .orElse(Collections.emptyList());
             authorRepository.saveAll(authors);
             Map<String, Author> authorMap = authors.stream()
                     .collect(Collectors.toMap(a -> a.getFirstname() + " " + a.getSurname(), a -> a));
 
             // =========================
-            // 3. Books (attach publisher)
+            // 3. Books
             // =========================
-            List<Map<String, Object>> bookMaps = mapper.convertValue(jsonData.get("books"),
-                    new TypeReference<List<Map<String, Object>>>() {});
+            List<Map<String, Object>> bookMaps = Optional.ofNullable(jsonData.get("books"))
+                    .map(b -> mapper.convertValue(b, new TypeReference<List<Map<String, Object>>>() {}))
+                    .orElse(Collections.emptyList());
             List<Book> books = new ArrayList<>();
             for (Map<String, Object> b : bookMaps) {
                 String title = (String) b.get("title");
-                Map<String, Object> pubObj = (Map<String, Object>) b.get("publisher");
-                String pubName = (String) pubObj.get("name");
+                String pubName = (String) b.get("publisher");
 
                 Book book = new Book();
                 book.setTitle(title);
@@ -79,10 +81,11 @@ public class DataLoader {
                     .collect(Collectors.toMap(Book::getTitle, b -> b));
 
             // =========================
-            // 4. Publishings (attach book)
+            // 4. Publishings
             // =========================
-            List<Map<String, Object>> publishingMaps = mapper.convertValue(jsonData.get("publishings"),
-                    new TypeReference<List<Map<String, Object>>>() {});
+            List<Map<String, Object>> publishingMaps = Optional.ofNullable(jsonData.get("publishings"))
+                    .map(p -> mapper.convertValue(p, new TypeReference<List<Map<String, Object>>>() {}))
+                    .orElse(Collections.emptyList());
             List<Publishing> publishings = new ArrayList<>();
             for (Map<String, Object> p : publishingMaps) {
                 Publishing publishing = new Publishing();
@@ -91,33 +94,30 @@ public class DataLoader {
                 publishing.setNoTprice(Double.valueOf(p.get("noTprice").toString()));
                 publishing.setRoyalties(Double.valueOf(p.get("royalties").toString()));
 
-                Map<String, Object> bookObj = (Map<String, Object>) p.get("book");
-                String bookTitle = (String) bookObj.get("title");
+                String bookTitle = (String) p.get("book");
                 publishing.setBook(bookMap.get(bookTitle));
 
                 publishings.add(publishing);
             }
             publishingRepository.saveAll(publishings);
-
             Map<String, Publishing> publishingMap = publishings.stream()
                     .collect(Collectors.toMap(Publishing::getIsbn, p -> p));
 
             // =========================
             // 5. Author Participations
             // =========================
-            List<Map<String, Object>> partMaps = mapper.convertValue(jsonData.get("authorParticipations"),
-                    new TypeReference<List<Map<String, Object>>>() {});
+            List<Map<String, Object>> partMaps = Optional.ofNullable(jsonData.get("authorParticipations"))
+                    .map(p -> mapper.convertValue(p, new TypeReference<List<Map<String, Object>>>() {}))
+                    .orElse(Collections.emptyList());
             List<AuthorParticipation> participations = new ArrayList<>();
             for (Map<String, Object> p : partMaps) {
                 AuthorParticipation participation = new AuthorParticipation();
                 participation.setPctRateRoyalties(Double.valueOf(p.get("pct_rate_royalties").toString()));
 
-                Map<String, Object> authorObj = (Map<String, Object>) p.get("author");
-                String key = authorObj.get("firstname") + " " + authorObj.get("surname");
-                participation.setAuthor(authorMap.get(key));
+                String authorKey = (String) p.get("author");
+                participation.setAuthor(authorMap.get(authorKey));
 
-                Map<String, Object> bookObj = (Map<String, Object>) p.get("book");
-                String bookTitle = (String) bookObj.get("title");
+                String bookTitle = (String) p.get("book");
                 participation.setBook(bookMap.get(bookTitle));
 
                 participations.add(participation);
@@ -127,20 +127,22 @@ public class DataLoader {
             // =========================
             // 6. Monthly Sales
             // =========================
-            List<Map<String, Object>> saleMaps = mapper.convertValue(jsonData.get("monthlySales"),
-                    new TypeReference<List<Map<String, Object>>>() {});
+            List<Map<String, Object>> saleMaps = Optional.ofNullable(jsonData.get("monthlySales"))
+                    .map(s -> mapper.convertValue(s, new TypeReference<List<Map<String, Object>>>() {}))
+                    .orElse(Collections.emptyList());
             List<MonthlySale> sales = new ArrayList<>();
             for (Map<String, Object> s : saleMaps) {
                 MonthlySale sale = new MonthlySale();
-                sale.setYear((Integer) s.get("year"));
-                sale.setMonth((Integer) s.get("month"));
-                sale.setQuantitySold((Integer) s.get("quantitySold"));
-                sale.setQuantityReturn((Integer) s.get("quantityReturn"));
-                sale.setAverageDiscount(Double.valueOf(s.get("averageDiscount").toString()));
+                sale.setSaleYear((Integer) s.getOrDefault("year", 0));
+                sale.setSaleMonth((Integer) s.getOrDefault("month", 0));
+                sale.setQuantitySold((Integer) s.getOrDefault("quantitySold", 0));
+                sale.setQuantityReturn((Integer) s.getOrDefault("quantityReturn", 0));
+                sale.setAverageDiscount(Double.valueOf(s.getOrDefault("averageDiscount", 0.0).toString()));
 
-                Map<String, Object> pubObj = (Map<String, Object>) s.get("publishing");
-                String pubIsbn = (String) pubObj.get("isbn");
-                sale.setPublishing(publishingMap.get(pubIsbn));
+                String pubIsbn = (String) s.get("publishing");
+                if (pubIsbn != null && publishingMap.get(pubIsbn) != null) {
+                    sale.setPublishingId(publishingMap.get(pubIsbn).getPublishingId());
+                }
 
                 sales.add(sale);
             }
@@ -149,23 +151,24 @@ public class DataLoader {
             // =========================
             // 6bis. BookSales
             // =========================
-            List<Map<String, Object>> bookSaleMaps = mapper.convertValue(jsonData.get("bookSales"),
-                    new TypeReference<List<Map<String, Object>>>() {});
+            List<Map<String, Object>> bookSaleMaps = Optional.ofNullable(jsonData.get("bookSales"))
+                    .map(s -> mapper.convertValue(s, new TypeReference<List<Map<String, Object>>>() {}))
+                    .orElse(Collections.emptyList());
             List<BookSales> bookSalesList = new ArrayList<>();
             for (Map<String, Object> s : bookSaleMaps) {
                 BookSales sale = new BookSales();
-                sale.setYear((Integer) s.get("year"));
-                sale.setMonth((Integer) s.get("month"));
-                sale.setQuantitySold((Integer) s.get("quantitySold"));
-                sale.setQuantityReturn((Integer) s.get("quantityReturn"));
-                sale.setAverageDiscount(Double.valueOf(s.get("averageDiscount").toString()));
+                sale.setYear((Integer) s.getOrDefault("year", 0));
+                sale.setMonth((Integer) s.getOrDefault("month", 0));
+                sale.setQuantitySold((Integer) s.getOrDefault("quantitySold", 0));
+                sale.setQuantityReturn((Integer) s.getOrDefault("quantityReturn", 0));
+                sale.setAverageDiscount(Double.valueOf(s.getOrDefault("averageDiscount", 0.0).toString()));
 
-                Map<String, Object> pubObj = (Map<String, Object>) s.get("publishing");
-                String pubIsbn = (String) pubObj.get("isbn");
-
+                String pubIsbn = (String) s.get("isbn");
                 Publishing pub = publishingMap.get(pubIsbn);
-                if (pub == null) throw new RuntimeException("Publishing with ISBN " + pubIsbn + " not found");
-
+                if (pub == null) {
+                    System.err.println("⚠️ Publishing with ISBN " + pubIsbn + " not found");
+                    continue;
+                }
                 sale.setPublishing(pub);
                 sale.setBook(pub.getBook());
 
@@ -176,8 +179,9 @@ public class DataLoader {
             // =========================
             // 7. Users
             // =========================
-            List<Map<String, Object>> userMaps = mapper.convertValue(jsonData.get("users"),
-                    new TypeReference<List<Map<String, Object>>>() {});
+            List<Map<String, Object>> userMaps = Optional.ofNullable(jsonData.get("users"))
+                    .map(u -> mapper.convertValue(u, new TypeReference<List<Map<String, Object>>>() {}))
+                    .orElse(Collections.emptyList());
             List<PubUser> users = new ArrayList<>();
             for (Map<String, Object> u : userMaps) {
                 PubUser user = new PubUser();
@@ -186,10 +190,9 @@ public class DataLoader {
                 user.setPassword(passwordEncoder.encode(rawPassword));
                 user.setRole(Role.valueOf((String) u.get("role")));
 
-                Map<String, Object> authorObj = (Map<String, Object>) u.get("author");
-                if (authorObj != null) {
-                    String key = authorObj.get("firstname") + " " + authorObj.get("surname");
-                    user.setAuthor(authorMap.get(key));
+                String authorKey = (String) u.get("author");
+                if (authorKey != null) {
+                    user.setAuthor(authorMap.get(authorKey));
                 }
                 users.add(user);
             }

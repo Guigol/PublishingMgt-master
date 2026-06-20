@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -95,7 +96,7 @@ public class AuthService {
     public ResponseEntity<JsonNode> createPubUser(AuthRequest req) {
         ObjectMapper mapper = new ObjectMapper();
 
-         if (req.getLogin() == null || req.getLogin().isBlank()) {
+        if (req.getLogin() == null || req.getLogin().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(mapper.createObjectNode().put("error", "login is required"));
         }
@@ -112,7 +113,6 @@ public class AuthService {
                     .body(mapper.createObjectNode().put("error", e.getMessage()));
         }
     }
-
 
     public ResponseEntity<JsonNode> login(AuthRequest loginRequest) {
         ObjectMapper mapper = new ObjectMapper();
@@ -139,7 +139,6 @@ public class AuthService {
         PubUser pubUser = pubUserRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("PubUser not exist with id :" + id));
 
-        // maj login et role
         if (req.getLogin() != null && !req.getLogin().isBlank()) {
             pubUser.setLogin(req.getLogin().trim());
         }
@@ -147,9 +146,6 @@ public class AuthService {
             pubUser.setRole(req.getRole());
         }
 
-        // ⚠️ ne pas toucher au mot de passe → réservé à l'utilisateur lui-même
-
-        // si role == AUTHOR : rattacher un auteur
         if (req.getRole() == Role.AUTHOR) {
             if (req.getAuthor() == null
                     || req.getAuthor().getFirstname() == null || req.getAuthor().getFirstname().isBlank()
@@ -173,7 +169,6 @@ public class AuthService {
 
             pubUser.setAuthor(author);
         } else {
-            // si ce n'est pas un auteur → on supprime le lien éventuel
             pubUser.setAuthor(null);
         }
 
@@ -181,6 +176,9 @@ public class AuthService {
         return ResponseEntity.ok(updated.asJson());
     }
 
+    public List<PubUser> getAllUsers() {
+        return pubUserRepository.findAll();
+    }
 
     private ObjectNode badCredentialsResponseNode(AuthRequest loginRequest) {
         return new ObjectMapper().createObjectNode()
@@ -198,6 +196,18 @@ public class AuthService {
                 .put("login", authentication.getName())
                 .put("role", authorities(authentication.getAuthorities()))
                 .put("jwt", jwtProvider.generateToken(authentication));
+    }
+
+    // From AuthService.java, after loginSuccessResponseNode
+
+    public String generateRefreshToken(String username, String role) {
+        // longer duration than the access token, ei : 7 days
+        return jwtProvider.generateTokenWithExpiry(username, role, 7 * 24 * 60 * 60 * 1000L);
+    }
+
+    public String generateAccessToken(String username, String role) {
+        // short duration, ei : 1 hour
+        return jwtProvider.generateTokenWithExpiry(username, role, 60 * 60 * 1000L);
     }
 
     private String authorities(Collection<? extends GrantedAuthority> grantedAuthority) {
@@ -221,4 +231,37 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("Author not found for login: " + login));
     }
 
+    public Authentication authenticate(AuthRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getLogin(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return authentication;
+    }
+
+    /* =======================================================
+       =============== REFRESH TOKEN  ========================
+       ======================================================= */
+
+    public boolean validateRefreshToken(String refreshToken) {
+        return jwtProvider.validateToken(refreshToken);
+    }
+
+    public String getUsernameFromRefreshToken(String refreshToken) {
+        return jwtProvider.getUsernameFromJwt(refreshToken);
+    }
+
+    public String generateNewAccessToken(String username) {
+        PubUser user = pubUserRepository.findByLogin(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return jwtProvider.generateAccessToken(
+                user.getLogin(),
+                user.getRole().name()
+        );
+    }
 }

@@ -50,7 +50,7 @@ public class PublisherServiceImpl implements PublisherService {
         try {
             publisherRepository.delete(publisher);
         } catch (DataIntegrityViolationException e) {
-            // Gestion propre de la contrainte FK
+            // Proper management of the FK constraint
             throw new RuntimeException("Cannot delete publisher because it is linked to existing books.");
         }
     }

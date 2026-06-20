@@ -5,7 +5,6 @@ import com.publ.PublishingMgt_master.entities.Author;
 import com.publ.PublishingMgt_master.entities.AuthorParticipation;
 import com.publ.PublishingMgt_master.entities.Book;
 import com.publ.PublishingMgt_master.entities.Publisher;
-import com.publ.PublishingMgt_master.repositories.AuthorParticipationRepository;
 import com.publ.PublishingMgt_master.repositories.AuthorRepository;
 import com.publ.PublishingMgt_master.repositories.BookRepository;
 import com.publ.PublishingMgt_master.repositories.PublisherRepository;
@@ -26,91 +25,81 @@ public class BookServiceImpl {
     @Autowired
     private AuthorRepository authorRepository;
 
-    @Autowired
-    private AuthorParticipationRepository participationRepository;
-
     public List<Book> books() {
         return bookRepository.findAll();
     }
 
-    // 🔹 DELETE book safely (with message)
+    // DELETE book safely (with message)
     public boolean deleteBook(Book book) {
-        // Check if there's still author's participation linked to this book
         if (book.getParticipations() != null && !book.getParticipations().isEmpty()) {
-            return false; // ❌ Impossible to delete
+            return false;
         }
 
-        // ✅ Si pas de participations, on peut le supprimer
         bookRepository.delete(book);
         return true;
     }
 
-
+    // CREATE
     public Book createBook(BookRequest bookRequest) {
+
         Publisher publisher = publisherRepository.findById(bookRequest.getPublisherId())
                 .orElseThrow(() -> new RuntimeException("Publisher not found with id: " + bookRequest.getPublisherId()));
 
-        // Création du livre
         Book book = Book.builder()
                 .title(bookRequest.getTitle())
                 .publisher(publisher)
                 .build();
 
-        Book savedBook = bookRepository.save(book);
-
-        // Author's participation creation
-        if (bookRequest.getAuthorIds() != null && !bookRequest.getAuthorIds().isEmpty()) {
+        // Participation management via Book
+        if (bookRequest.getAuthorIds() != null) {
             for (Long authorId : bookRequest.getAuthorIds()) {
+
                 Author author = authorRepository.findById(authorId)
                         .orElseThrow(() -> new RuntimeException("Author not found with id: " + authorId));
 
                 AuthorParticipation participation = AuthorParticipation.builder()
                         .author(author)
-                        .book(savedBook)
-                        .pctRateRoyalties(1.0)
+                        .pctRateRoyalties(0.10)
                         .build();
 
-                participationRepository.save(participation);
+                book.addParticipation(participation);
             }
         }
 
-        return savedBook;
+        return bookRepository.save(book);
     }
 
+    // UPDATE
     public Book updateBook(Long bookId, BookRequest bookRequest) {
-        // Vérifier que le book existe
-        Book existingBook = bookRepository.findById(bookId)
+
+        Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Book not found with id: " + bookId));
 
-        // Vérifier que le publisher existe
         Publisher publisher = publisherRepository.findById(bookRequest.getPublisherId())
                 .orElseThrow(() -> new RuntimeException("Publisher not found with id: " + bookRequest.getPublisherId()));
 
-        // Mise à jour des champs
-        existingBook.setTitle(bookRequest.getTitle());
-        existingBook.setPublisher(publisher);
+        book.setTitle(bookRequest.getTitle());
+        book.setPublisher(publisher);
 
-        Book updatedBook = bookRepository.save(existingBook);
+        // Clean removal (orphanRemoval)
+        book.clearParticipations();
 
-        // delete existing participations
-        participationRepository.deleteAll(updatedBook.getParticipations());
-
-        // participation's builder for new authors
-        if (bookRequest.getAuthorIds() != null && !bookRequest.getAuthorIds().isEmpty()) {
+        // Build
+        if (bookRequest.getAuthorIds() != null) {
             for (Long authorId : bookRequest.getAuthorIds()) {
+
                 Author author = authorRepository.findById(authorId)
                         .orElseThrow(() -> new RuntimeException("Author not found with id: " + authorId));
 
                 AuthorParticipation participation = AuthorParticipation.builder()
                         .author(author)
-                        .book(updatedBook)
-                        .pctRateRoyalties(1.0)
+                        .pctRateRoyalties(0.10)
                         .build();
 
-                participationRepository.save(participation);
+                book.addParticipation(participation);
             }
         }
 
-        return updatedBook;
+        return bookRepository.save(book);
     }
 }

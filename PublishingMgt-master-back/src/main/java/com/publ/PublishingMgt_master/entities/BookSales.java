@@ -17,6 +17,12 @@ public class BookSales {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "book_id", insertable = false, updatable = false)
+    private Long bookId;
+
+    @Column(name = "publishing_id", insertable = false, updatable = false)
+    private Long publishingId;
+
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
@@ -40,8 +46,8 @@ public class BookSales {
     @Column(name = "average_discount")
     private Double averageDiscount;
 
-
     public YearMonth getPeriod() {
         return YearMonth.of(year, month);
     }
+
 }

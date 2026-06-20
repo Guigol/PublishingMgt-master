@@ -21,49 +21,49 @@ public class PublishingController {
     private final PublishingService publishingService;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    // 🔹 GET all publishings
+    // GET all publishings
     @GetMapping("/publish/all")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<List<Publishing>> getAllPublishings() {
         return ResponseEntity.ok(publishingService.findAll());
     }
 
-    // 🔹 GET one publishing by ID
+    // GET one publishing by ID
     @GetMapping("/publish/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> getPublishingById(@PathVariable Long id) {
         return ResponseEntity.ok(asJson(publishingService.findById(id)));
     }
 
-    // 🔹 CREATE publishing
+    // CREATE publishing
     @PostMapping("/publish")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> createPublishing(@RequestBody Publishing publishing) {
         Publishing saved = publishingService.create(publishing);
         return ResponseEntity.status(HttpStatus.CREATED).body(asJson(saved));
     }
 
-    // 🔹 UPDATE publishing
+    // UPDATE publishing
     @PutMapping("/publish/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> updatePublishing(@PathVariable Long id, @RequestBody Publishing publishing) {
         Publishing updated = publishingService.update(id, publishing);
         return ResponseEntity.ok(asJson(updated));
     }
 
-    // 🔹 DELETE publishing
+    // DELETE publishing
     @DeleteMapping("/publish/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<JsonNode> deletePublishing(@PathVariable Long id) {
         publishingService.delete(id);
         ObjectNode node = mapper.createObjectNode().put("message", "Publishing deleted successfully");
         return ResponseEntity.ok(node);
     }
 
-    // 🔹 JSON helper
+    // JSON helper
     private ObjectNode asJson(Publishing publishing) {
         ObjectNode node = mapper.createObjectNode();
-        node.put("id", publishing.getPublishing_id());
+        node.put("id", publishing.getPublishingId());
         node.put("name", publishing.getName());
         node.put("isbn", publishing.getIsbn());
         node.put("noTprice", publishing.getNoTprice());

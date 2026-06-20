@@ -32,18 +32,20 @@ public class Book {
     @JoinColumn(name = "publisher_id", referencedColumnName = "publisher_id")
     private Publisher publisher;
 
-    @OneToMany(mappedBy = "book")
+    @Builder.Default
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("book-participations")
-    private List<AuthorParticipation> participations;
+    private List<AuthorParticipation> participations = new java.util.ArrayList<>();
 
     public JsonNode asJson() {
         ObjectMapper mapper = new ObjectMapper();
         var node = mapper.createObjectNode()
                 .put("id", book_id)
                 .put("title", title)
-                .put("publisher", publisher.getPublisher_id());
+                .put("publisher", publisher.getPublisher_id())
+                .put("name", publisher.getName());
 
-        // ✅ Ajouter les auteurs liés
+        // Add related authors
         var authorsArray = mapper.createArrayNode();
         if (participations != null) {
             participations.forEach(p ->
@@ -58,6 +60,18 @@ public class Book {
         node.set("authors", authorsArray);
 
         return node;
+    }
+
+    public void addParticipation(AuthorParticipation participation) {
+        this.participations.add(participation);
+        participation.setBook(this);
+    }
+
+    public void clearParticipations() {
+        for (AuthorParticipation p : participations) {
+            p.setBook(null);
+        }
+        participations.clear();
     }
 
 }

@@ -1,10 +1,7 @@
 package com.publ.PublishingMgt_master.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "Publisher")
@@ -13,6 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Publisher {
+    public Publisher(Long publisher_id) {
+        this.publisher_id = publisher_id;
+    }
 
     @Id
     @Column(name = "publisher_id")

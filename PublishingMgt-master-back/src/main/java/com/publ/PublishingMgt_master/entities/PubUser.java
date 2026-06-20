@@ -54,11 +54,24 @@ public class PubUser {
 
     public JsonNode asJson() {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.createObjectNode()
+
+        var node = mapper.createObjectNode()
                 .put("id", id)
                 .put("login", login)
-                .put("password", password.toString())
+                .put("password", password)
                 .put("role", role.toString());
+
+        if (createdAt != null) {
+            node.put("createdAt", createdAt.toString());
+        }
+
+        if (author != null) {
+            node.put("authorId", author.getAuthor_id());
+            node.put("firstname", author.getFirstname());
+            node.put("surname", author.getSurname());
+        }
+
+        return node;
     }
 
 }
