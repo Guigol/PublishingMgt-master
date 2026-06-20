@@ -1,0 +1,106 @@
+nav a {
+  margin-right: 10px;
+}
+
+.custom-toolbar {
+  height: 72px;
+  padding: 0 30px;
+  background: linear-gradient(135deg, #a7e4fa, #0a629d);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+
+button[mat-button] {
+  border-radius: 8px;
+  transition: 0.3s;
+  font-weight: 500;
+  color: white;
+}
+
+button[mat-button]:hover {
+  background-color: rgba(255,255,255,0.15);
+}
+
+.logout-btn {
+  margin-left: 10px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+mat-icon {
+  vertical-align: middle;
+}
+
+/* ACTIVE ROUTE */
+.active-link {
+  background-color: rgba(255, 255, 255, 0.20);
+  color: white !important;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 2px 8px rgba(255,255,255,0.15);
+}
+
+.active-link mat-icon {
+  color: white !important;
+}
+
+/* ===== RESPONSIVE RULES ===== */
+.desktop-only {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* hidden hamburger button on desktop */
+.mobile-only {
+  display: none;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .user-section {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
+
+  .custom-toolbar {
+    padding: 0 10px;
+  }
+
+  .mobile-only button {
+  color: white;
+    }
+}

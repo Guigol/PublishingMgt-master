@@ -1,0 +1,152 @@
+:host {
+  display: block;
+  padding: 10px;
+  background: #f5f7fa;
+  min-height: 100vh;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Title */
+h2 {
+  padding-top: 5px;
+  padding-bottom: 20px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1e293b;
+  text-align: center;
+}
+
+/* inputs */
+
+.search-input {
+  margin-left: auto;
+  min-width: 280px;
+  max-width: 380px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d6dbe1; 
+  border-radius: 8px;
+  font-size: 14px;
+  background: #ffffff;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #bfc7d1;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 0 0 3px rgba(25, 118, 210, 0.06);
+}
+
+/* Buttons */
+button {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 8px;
+  background: #024384;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-right: 15px;
+ }
+
+button:hover {
+  background: #024384;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+  margin-top: 20px;
+}
+
+/* Error */
+.error-box {
+  background: #ffe5e5;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 20px auto;
+  max-width: 700px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  table-layout: fixed;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  margin: 10px auto;
+}
+
+
+th {
+  background: #024384;
+  color: white;
+  font-weight: 600;
+  padding: 14px;
+  /* text-align: center; */
+  font-size: 14px;
+}
+
+td {
+  padding: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #374151;
+ }
+
+tr:hover td {
+  background: #f8fafc;
+}
+
+.paginator {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    align-items: center;
+}
+
+button.pagin {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* Book grouped section */
+.book-group {
+  margin-top: 28px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+h3 {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0f172a;
+  border-left: 5px solid #024384;
+  text-align: center;
+  
+}

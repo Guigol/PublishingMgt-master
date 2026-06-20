@@ -1,0 +1,121 @@
+.royalties-container {
+  max-width: 1000px;
+  margin: 10px auto;
+  padding-bottom: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  font-family: Roboto, sans-serif;
+}
+
+.royalties-container h2 {
+  margin-bottom: 30px;
+  color: #1e293b;
+  text-align: center;
+  font-weight: 800;
+  font-size: 30px;
+}
+
+/* FILTERS */
+.filters {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #666;
+  }
+
+.filter-group select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #024384;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
+}
+
+/* TABLE */
+.royalties-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.royalties-table thead {
+  background: #024384;
+  color: white;
+}
+
+.royalties-table th {
+  text-align: center;
+  padding: 12px;
+  font-weight: 500;
+}
+
+.royalties-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.royalties-table tbody tr {
+  transition: background 0.2s;
+}
+
+.royalties-table tbody tr:hover {
+  background: #f5f7ff;
+}
+
+/* total */
+.royalties-table td:last-child {
+  font-weight: 500;
+  color: #990474;
+}
+
+.paginator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.paginator button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #024384;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.paginator button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.paginator button:hover:not(:disabled) {
+  background: #024384;
+}

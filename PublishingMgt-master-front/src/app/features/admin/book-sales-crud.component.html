@@ -1,0 +1,238 @@
+<div class="table-page">
+  <h2>Ventes des livres</h2>
+
+  <mat-sidenav-container class="container">
+
+    <mat-sidenav-content class="content">
+
+      <div class="page">
+
+        <!-- SEARCH -->
+        <div class="search-bar">
+
+          <input placeholder="ISBN"
+                 [(ngModel)]="search.isbn"
+                 (input)="applyFilters()">
+
+          <input placeholder="Livre"
+                 [(ngModel)]="search.book"
+                 (input)="applyFilters()">
+
+          <input placeholder="Publication"
+                 [(ngModel)]="search.publishing"
+                 (input)="applyFilters()">
+
+        </div>
+
+        <!-- STATUS -->
+        <!-- SUCCESS -->
+            <div *ngIf="successMessage" style="color:green; margin-bottom:10px;">
+              {{ successMessage }}
+            </div>
+
+            <!-- ERROR -->
+            <div *ngIf="error" style="color:red; margin-bottom:10px;">
+              {{ error }}
+         </div>
+
+        <!-- TABLE -->
+        <div class="table-center">
+          <div class="table-wrapper">
+
+            <table mat-table [dataSource]="dataSource" matSort>
+
+              <!-- ID -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+              </ng-container>
+
+              <!-- ISBN -->
+              <ng-container matColumnDef="isbn">
+                <th mat-header-cell *matHeaderCellDef>ISBN</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.publishing?.isbn }}
+                </td>
+              </ng-container>
+
+              <!-- BOOK -->
+              <ng-container matColumnDef="book">
+                <th mat-header-cell *matHeaderCellDef>Livre</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.book?.title }}
+                </td>
+              </ng-container>
+
+              <!-- PUBLICATION -->
+              <ng-container matColumnDef="publishing">
+                <th mat-header-cell *matHeaderCellDef>Publication</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.publishing?.name }}
+                </td>
+              </ng-container>
+
+              <!-- MONTH -->
+              <ng-container matColumnDef="month">
+                <th mat-header-cell *matHeaderCellDef>Mois</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ getMonthName(row.month) }}
+                </td>
+              </ng-container>
+
+              <!-- YEAR -->
+              <ng-container matColumnDef="year">
+                <th mat-header-cell *matHeaderCellDef>Année</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.year }}
+                </td>
+              </ng-container>
+
+              <!-- SOLD -->
+              <ng-container matColumnDef="quantitySold">
+                <th mat-header-cell *matHeaderCellDef>Ventes</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.quantitySold }}
+                </td>
+              </ng-container>
+
+              <!-- RETURN -->
+              <ng-container matColumnDef="quantityReturn">
+                <th mat-header-cell *matHeaderCellDef>Retours</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.quantityReturn }}
+                </td>
+              </ng-container>
+
+              <!-- DISCOUNT -->
+              <ng-container matColumnDef="averageDiscount">
+                <th mat-header-cell *matHeaderCellDef>Réduction</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row.averageDiscount }}
+                </td>
+              </ng-container>
+
+              <!-- ACTIONS -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+                <td mat-cell *matCellDef="let row" class="actions-cell">
+
+                  <button mat-raised-button color="accent"
+                          (click)="edit(row)">
+                    Modifier
+                  </button>
+
+                  <button mat-raised-button color="warn"
+                          (click)="delete(row.id)">
+                    Supprimer
+                  </button>
+
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+
+            <div class="table-actions-bar">
+              <button mat-raised-button color="primary" (click)="openCreate()">
+                Créer Vente
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CUSTOM PAGINATOR -->
+      <div class="custom-paginator">
+
+        <button class="nav-btn"
+                (click)="paginator.previousPage()"
+                [disabled]="!paginator.hasPreviousPage()">
+          ◀
+        </button>
+
+        <span class="page-label">
+          Page {{ paginator.pageIndex + 1 }} / {{ paginator.getNumberOfPages() }}
+        </span>
+
+        <button class="nav-btn"
+                (click)="paginator.nextPage()"
+                [disabled]="!paginator.hasNextPage()">
+          ▶
+        </button>
+
+      </div>
+
+      <!-- MAT PAGINATOR -->
+      <mat-paginator
+        #paginator
+        [pageSize]="4"
+        [hidePageSize]="true">
+      </mat-paginator>
+
+    </mat-sidenav-content>
+
+    <!-- DRAWER -->
+    <mat-sidenav mode="over" position="end" [(opened)]="drawerOpen">
+
+      <h3>{{ selected ? 'Modifier Vente' : 'Créer Vente' }}</h3>
+
+      <!-- UI BOOK ONLY -->
+      <label>Livre</label>
+      <select [(ngModel)]="form.bookId">
+          <option *ngFor="let b of books" [ngValue]="b.id">
+            {{ b.title }}
+          </option>
+      </select>
+
+      <!-- BACKEND KEY -->
+      <label>ISBN</label>
+      <input type="text"
+             [(ngModel)]="form.publishingIsbn"
+             placeholder="Saisir l'ISBN"
+             (blur)="validateIsbn()" />
+
+      <div class="error" *ngIf="isbnError">
+          ISBN invalide ou non associé à un livre
+      </div>
+
+      <label>Mois</label>
+      <select [(ngModel)]="form.month">
+        <option *ngFor="let m of availableMonths; let i = index"
+                [ngValue]="i + 1">
+          {{ m }}
+        </option>
+      </select>
+
+      <label>Année</label>
+      <input type="number"
+             [(ngModel)]="form.year"
+             [max]="currentYear"
+             (change)="onYearChange()">
+
+      <label>Ventes</label>
+      <input type="number" [(ngModel)]="form.quantitySold">
+
+      <label>Retours</label>
+      <input type="number" [(ngModel)]="form.quantityReturn">
+
+      <label>Réduction</label>
+      <input type="number" [(ngModel)]="form.averageDiscount">
+
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="save()">
+          Valider
+        </button>
+
+        <button mat-button (click)="closeDrawer()">
+          Annuler
+        </button>
+      </div>
+
+    </mat-sidenav>
+
+  </mat-sidenav-container>
+</div>

@@ -1,0 +1,253 @@
+<app-navbar></app-navbar>
+
+<div class="royalties-container">
+
+  <!-- BACK -->
+  <div class="dashboard-nav">
+    <a routerLink="/author-overview" class="back-btn">
+      ← Vue Auteur
+    </a>
+  </div>
+
+  <!-- TITLE -->
+  <h2>Royalties Auteur</h2>
+
+  <!-- LOADING -->
+  <div *ngIf="loading" class="info-message">
+    Chargement des royalties...
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <!-- CONTENT -->
+  <ng-container *ngIf="!loading">
+
+    <!-- FILTER -->
+    <div class="filters">
+
+      <div class="filter-group">
+
+        <label for="year">Année</label>
+
+        <select
+          id="year"
+          [(ngModel)]="selectedYear"
+          (ngModelChange)="onYearChange()"
+        >
+          <option [value]="2024">2024</option>
+          <option [value]="2025">2025</option>
+          <option [value]="2026">2026</option>
+        </select>
+
+          <button
+    class="export-btn"
+    (click)="exportToExcel()">
+
+    Télécharger XLS
+
+  </button>
+
+      </div>
+
+    
+
+    </div>
+
+    <!-- ===================== -->
+    <!-- VIEW 1 : BOOKS LIST -->
+    <!-- ===================== -->
+    <ng-container *ngIf="!selectedBook">
+
+      <ng-container *ngIf="(yearlyTotals || []).length > 0; else noBooks">
+
+        <table class="royalties-table">
+
+          <thead>
+            <tr>
+              <th>Livre</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr
+              *ngFor="let b of yearlyTotals
+                | slice:(paginator.pageIndex * paginator.pageSize):
+                        ((paginator.pageIndex + 1) * paginator.pageSize)"
+              (click)="selectBook(b.title)"
+              class="clickable-row"
+            >
+
+              <td>
+                DETAILS PAR LIVRE - {{ b.title }}
+              </td>
+
+              <td>
+                {{ b.totalAmount | number:'1.2-2' }} €
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+        <!-- PAGINATOR -->
+        <div class="custom-paginator">
+
+          <button
+            class="nav-btn"
+            (click)="paginator.previousPage()"
+            [disabled]="!paginator.hasPreviousPage()"
+          >
+            ◀
+          </button>
+
+          <span class="page-label">
+            Page {{ paginator.pageIndex + 1 }}
+            /
+            {{ paginator.getNumberOfPages() }}
+          </span>
+
+          <button
+            class="nav-btn"
+            (click)="paginator.nextPage()"
+            [disabled]="!paginator.hasNextPage()"
+          >
+            ▶
+          </button>
+
+        </div>
+
+        <mat-paginator
+          #paginator
+          [length]="yearlyTotals.length"
+          [pageSize]="5"
+          [hidePageSize]="true">
+        </mat-paginator>
+
+      </ng-container>
+
+      <ng-template #noBooks>
+
+        <div class="empty-message">
+          Aucune donnée pour cette année.
+        </div>
+
+      </ng-template>
+
+    </ng-container>
+
+    <!-- ===================== -->
+    <!-- VIEW 2 : MONTHLY DETAILS -->
+    <!-- ===================== -->
+    <ng-container *ngIf="selectedBook">
+
+      <div class="details-header">
+
+        <button
+          class="back-details-btn"
+          (click)="goBackToBooks()"
+        >
+          ⬅ Retour
+        </button>
+
+        <h3>
+          {{ selectedBook }} ({{ selectedYear }})
+        </h3>
+
+      </div>
+
+      <ng-container *ngIf="(monthlyDetails || []).length > 0; else noDetails">
+
+        <table class="royalties-table">
+
+          <thead>
+            <tr>
+              <th>Mois</th>
+              <th>Quantité vendue</th>
+              <th>Retours</th>
+              <th>Net</th>
+              <th>Montant (€)</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr
+              *ngFor="let m of (monthlyDetails || [])
+                | slice:(detailsPaginator.pageIndex * detailsPaginator.pageSize):
+                        ((detailsPaginator.pageIndex + 1) * detailsPaginator.pageSize)"
+            >
+
+              <td>{{ m.month }}</td>
+
+              <td>{{ m.quantitySold ?? 0 }}</td>
+
+              <td>{{ m.quantityReturn ?? 0 }}</td>
+
+              <td>{{ m.quantityNet ?? 0 }}</td>
+
+              <td>{{ m.montant | number:'1.2-2' }} €</td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+        <!-- PAGINATOR -->
+        <div class="custom-paginator">
+
+          <button
+            class="nav-btn"
+            (click)="detailsPaginator.previousPage()"
+            [disabled]="!detailsPaginator.hasPreviousPage()"
+          >
+            ◀
+          </button>
+
+          <span class="page-label">
+            Page {{ detailsPaginator.pageIndex + 1 }}
+            /
+            {{ detailsPaginator.getNumberOfPages() }}
+          </span>
+
+          <button
+            class="nav-btn"
+            (click)="detailsPaginator.nextPage()"
+            [disabled]="!detailsPaginator.hasNextPage()"
+          >
+            ▶
+          </button>
+
+        </div>
+
+        <mat-paginator
+          #detailsPaginator
+          [length]="monthlyDetails.length"
+          [pageSize]="3"
+          [hidePageSize]="true">
+        </mat-paginator>
+
+      </ng-container>
+
+      <ng-template #noDetails>
+
+        <div class="empty-message">
+          Aucun détail disponible pour ce livre.
+        </div>
+
+      </ng-template>
+
+    </ng-container>
+
+  </ng-container>
+
+</div>
+
+<router-outlet></router-outlet>

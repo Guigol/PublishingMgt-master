@@ -1,0 +1,259 @@
+<div class="table-page">
+
+  <h2>Participation Auteur</h2>
+
+  <mat-sidenav-container class="container">
+
+    <!-- CONTENT -->
+    <mat-sidenav-content class="content">
+
+      <div class="page">
+
+        <!-- SEARCH -->
+        <div class="search-bar">
+
+          <input
+            type="text"
+            placeholder="Recherche Auteur"
+            [(ngModel)]="search.author"
+            (input)="applyFilters()"
+          >
+
+          <input
+            type="text"
+            placeholder="Recherche Livre"
+            [(ngModel)]="search.book"
+            (input)="applyFilters()"
+          >
+
+        </div>
+
+        <!-- STATES -->
+        <div *ngIf="loading" class="loading">
+          Loading...
+        </div>
+
+        <!-- GLOBAL STATUS  -->
+        <div class="status-container">
+
+          <div *ngIf="successMessage" class="success">
+            {{ successMessage }}
+          </div>
+
+          <div *ngIf="error" class="error">
+            {{ error }}
+          </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-center">
+
+          <div class="table-wrapper">
+
+            <table
+              mat-table
+              [dataSource]="dataSource"
+              class="mat-elevation-z8">
+
+              <!-- ID -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID</th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.id }}
+                </td>
+              </ng-container>
+
+              <!-- AUTHOR -->
+              <ng-container matColumnDef="author">
+                <th mat-header-cell *matHeaderCellDef>Auteur</th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.authorName }}
+                </td>
+              </ng-container>
+
+              <!-- BOOK -->
+              <ng-container matColumnDef="book">
+                <th mat-header-cell *matHeaderCellDef>Livre</th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.bookTitle }}
+                </td>
+              </ng-container>
+
+              <!-- ROYALTIES -->
+              <ng-container matColumnDef="royalties">
+                <th mat-header-cell *matHeaderCellDef>Royalties</th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.pctRateRoyalties }}
+                </td>
+              </ng-container>
+
+              <!-- ACTIONS -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+
+                <td mat-cell *matCellDef="let p" class="actions-cell">
+
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    (click)="edit(p)">
+                    Modifier
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="delete(p.id)">
+                    Supprimer
+                  </button>
+
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns;">
+              </tr>
+
+            </table>
+
+            <!-- CREATE BUTTON -->
+            <div class="table-actions-bar">
+
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="showCreate()">
+
+                Ajouter Participation
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+       <!-- CENTERED PAGINATOR -->
+            <div class="custom-paginator">
+
+            <button
+              class="nav-btn"
+              (click)="paginator.previousPage()"
+              [disabled]="!paginator.hasPreviousPage()">
+
+              ◀
+            </button>
+
+            <span class="page-label">
+              Page {{ paginator.pageIndex + 1 }} / {{ paginator.getNumberOfPages() }}
+            </span>
+
+            <button
+              class="nav-btn"
+              (click)="paginator.nextPage()"
+              [disabled]="!paginator.hasNextPage()">
+
+              ▶
+            </button>
+
+          </div>
+
+      <mat-paginator
+        #paginator
+        [pageSize]="5"
+        [hidePageSize]="true">
+      </mat-paginator>
+
+
+    </mat-sidenav-content>
+
+    <!-- DRAWER -->
+    <mat-sidenav
+      mode="over"
+      position="end"
+      [(opened)]="showForm"
+      class="drawer">
+
+      <h3>
+        {{ selected ? 'Modifier Participation' : 'Ajouter Participation' }}
+      </h3>
+
+      <label>Auteur</label>
+
+      <select [(ngModel)]="form.authorId">
+
+          <option
+            *ngFor="let a of authors"
+            [value]="a.authorId">
+
+             {{ a.name }}
+
+          </option>
+
+      </select>
+
+      <label>Livre</label>
+
+      <select [(ngModel)]="form.bookId">
+
+          <option
+            *ngFor="let b of books"
+            [value]="b.id">
+
+            {{ b.title }}
+
+          </option>
+
+      </select>
+
+      <label>Royalties (0-1)</label>
+
+      <input
+        type="number"
+        step="0.01"
+        [(ngModel)]="form.pctRateRoyalties">
+
+      <div class="actions">
+
+        <button
+          mat-raised-button
+          color="primary"
+          *ngIf="!selected"
+          (click)="create()">
+
+          Create
+
+        </button>
+
+        <button
+          mat-raised-button
+          color="primary"
+          *ngIf="selected"
+          (click)="update()">
+
+          Update
+
+        </button>
+
+        <button
+          mat-button
+          (click)="cancel()">
+
+          Cancel
+
+        </button>
+
+      </div>
+
+    </mat-sidenav>
+
+  </mat-sidenav-container>
+
+</div>

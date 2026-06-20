@@ -1,0 +1,22 @@
+{
+  "admin": {
+    "login": "admin",
+    "password": "admin123",
+    "role": "ADMIN"
+  },
+  "user": {
+    "login": "useruser",
+    "password": "12345",
+    "role": "USER"
+  },
+  "author": {
+    "login": "vhugo",
+    "password": "12345",
+    "role": "AUTHOR"
+  },
+  "manager": {
+    "login": "mgr1",
+    "password": "12345",
+    "role": "MANAGER"
+  }
+}

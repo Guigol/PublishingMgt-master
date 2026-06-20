@@ -1,0 +1,235 @@
+<div class="table-page">
+  <h2>Livres</h2>
+ 
+  <mat-sidenav-container class="container">
+    
+    <!-- LEFT CONTENT -->
+    <mat-sidenav-content class="content">
+      
+      <div class="page">
+    <!-- GLOBAL STATUS  -->
+      <div class="status-container">
+
+        <div *ngIf="successMessage" class="success">
+          {{ successMessage }}
+        </div>
+
+        <div *ngIf="error" class="error">
+          {{ error }}
+        </div>
+
+      </div>
+
+         
+        <!-- TABLE -->
+        <div class="table-center">
+
+          <div class="table-wrapper">
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+              <!-- BOOK ID -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>
+                  ID_LIVRE
+                </th>
+                <td mat-cell *matCellDef="let book">
+                  {{ book.id }}
+                </td>
+              </ng-container>
+
+              <!-- TITLE -->
+              <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef>
+                  TITRE
+                </th>
+                <td mat-cell *matCellDef="let book">
+                  {{ book.title }}
+                </td>
+              </ng-container>
+
+              <!-- PUBLISHER -->
+              <ng-container matColumnDef="publisher">
+                <th mat-header-cell *matHeaderCellDef>
+                  EDITEUR
+                </th>
+                <td mat-cell *matCellDef="let book">
+                  {{ getPublisherName(book.publisher) }}
+                </td>
+              </ng-container>
+
+              <!-- AUTHORS -->
+              <ng-container matColumnDef="authors">
+                <th mat-header-cell *matHeaderCellDef>
+                  AUTEUR
+                </th>
+                <td mat-cell *matCellDef="let book">
+
+                  <span *ngFor="let author of book.authors">
+                    {{ author.firstname }} {{ author.surname }}
+                  </span>
+
+                </td>
+              </ng-container>
+
+              <!-- ACTIONS -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>
+                  ACTIONS
+                </th>
+
+                <td mat-cell *matCellDef="let book" class="actions-cell">
+
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    (click)="edit(book)">
+
+                    Modifer
+
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="delete(book.id)">
+
+                    Supprimer
+
+                  </button>
+
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+
+            <!-- CREATE BUTTON -->
+            <div class="table-actions-bar">
+
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="openCreate()">
+
+                Ajouter Livre
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+       <!-- CENTERED PAGINATOR -->
+  <div class="custom-paginator">
+
+  <button
+    class="nav-btn"
+    (click)="paginator.previousPage()"
+    [disabled]="!paginator.hasPreviousPage()">
+
+    ◀
+  </button>
+
+  <span class="page-label">
+    Page {{ paginator.pageIndex + 1 }} / {{ paginator.getNumberOfPages() }}
+  </span>
+
+  <button
+    class="nav-btn"
+    (click)="paginator.nextPage()"
+    [disabled]="!paginator.hasNextPage()">
+
+    ▶
+  </button>
+
+</div>
+
+      <!-- PAGINATOR -->
+     <mat-paginator
+        #paginator
+        [pageSize]="5"
+        [hidePageSize]="true">
+      </mat-paginator>
+
+    </mat-sidenav-content>
+
+    <!-- RIGHT DRAWER -->
+   <mat-sidenav
+      mode="over"
+      position="end"
+      [opened]="showForm"
+      (openedChange)="showForm = $event"
+      class="drawer">
+
+      <h3>
+        {{ selectedBook ? 'Edit Book' : 'Ajouter Livre' }}
+      </h3>
+
+      <!-- TITLE -->
+      <label>Title</label>
+      <input
+        type="text"
+        [(ngModel)]="formBook.title">
+
+      <!-- PUBLISHER -->
+      <label>Editeur</label>
+      <mat-form-field appearance="outline">
+        <mat-select
+          [ngModel]="formBook.publisherId"
+          (ngModelChange)="formBook.publisherId = $event">
+
+          <mat-option *ngFor="let p of publishers" [value]="p.publisher_id">
+            {{ p.name }}
+          </mat-option>
+
+        </mat-select>
+      </mat-form-field>
+
+      <!-- AUTHORS -->
+    <label>Auteur</label>
+      <mat-form-field appearance="outline">
+  <mat-select
+    multiple
+    [(ngModel)]="formBook.authorIds">
+
+   <mat-option *ngFor="let a of authors" [value]="a.authorId">
+    {{ a.firstname }} {{ a.surname }}
+</mat-option>
+
+  </mat-select>
+</mat-form-field>
+
+      <!-- ACTIONS -->
+      <div class="actions">
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="selectedBook ? update() : create()">
+
+          {{ selectedBook ? 'Update' : 'Ajouter' }}
+
+        </button>
+
+        <button
+          mat-button
+          (click)="cancel()">
+
+          Annuler
+
+        </button>
+
+      </div>
+
+    </mat-sidenav>
+
+  </mat-sidenav-container>
+</div>

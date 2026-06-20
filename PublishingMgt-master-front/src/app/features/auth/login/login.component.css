@@ -1,0 +1,97 @@
+/* =========================
+   LOGIN COMPONENT
+========================= */
+
+:host {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  z-index: 20;
+}
+
+/* Title */
+h2 {
+  text-align: center;
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 800;
+  margin-bottom: 24px;
+  color: #2c3e50;
+}
+
+/* Form */
+form {
+  width: 100%;
+  padding: 28px;
+  background: #ffffff;
+  border-radius: 14px;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Inputs */
+form input {
+  width: 100%;
+  padding: 14px 16px;
+
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+
+  font-size: 15px;
+  background: #fafafa;
+
+  outline: none;
+  transition: 0.2s ease;
+  box-sizing: border-box;
+}
+
+form input:focus {
+  border-color: #024384;
+  background: #fff;
+}
+
+/* Button */
+form button {
+  margin-top: 6px;
+  padding: 14px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #024384;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+form button:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+/* Error */
+.error {
+  margin-top: 16px;
+  text-align: center;
+  color: #d32f2f;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+
+  form {
+    padding: 20px;
+  }
+
+}

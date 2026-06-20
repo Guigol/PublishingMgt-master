@@ -1,0 +1,255 @@
+<div class="table-page">
+  <h2>Publications</h2>
+
+  <mat-sidenav-container class="container">
+
+    <!-- LEFT CONTENT -->
+    <mat-sidenav-content class="content">
+
+      <div class="page">
+
+        <div class="page">
+
+        <!-- GLOBAL STATUS -->
+        <div class="status-container">
+
+          <div *ngIf="successMessage" class="success">
+            {{ successMessage }}
+          </div>
+
+          <div *ngIf="error" class="error">
+            {{ error }}
+          </div>
+
+        </div>
+
+  <!-- TABLE -->
+  <div class="table-center">
+
+        <!-- TABLE -->
+        <div class="table-center">
+
+          <div class="table-wrapper">
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+              <!-- ID -->
+              <ng-container matColumnDef="publishingId">
+                <th mat-header-cell *matHeaderCellDef>
+                  ID_PUB
+                </th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.publishingId }}
+                </td>
+              </ng-container>
+
+              <!-- NAME -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>
+                  NOM
+                </th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.name }}
+                </td>
+              </ng-container>
+
+              <!-- ISBN -->
+              <ng-container matColumnDef="isbn">
+                <th mat-header-cell *matHeaderCellDef>
+                  ISBN
+                </th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.isbn }}
+                </td>
+              </ng-container>
+
+              <!-- NO TAXE PRICE -->
+              <ng-container matColumnDef="noTprice">
+                <th mat-header-cell *matHeaderCellDef>
+                  Prix HT
+                </th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.noTprice }}
+                </td>
+              </ng-container>
+
+              <!-- ROYALTIES -->
+              <ng-container matColumnDef="royalties">
+                <th mat-header-cell *matHeaderCellDef>
+                  Royalties
+                </th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.royalties }}
+                </td>
+              </ng-container>
+
+              <!-- BOOK ID -->
+              <ng-container matColumnDef="bookId">
+                <th mat-header-cell *matHeaderCellDef>
+                  ID_Livre
+                </th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.book?.book_id }}
+                </td>
+              </ng-container>
+
+              <!-- BOOK TITLE -->
+              <ng-container matColumnDef="bookTitle">
+                <th mat-header-cell *matHeaderCellDef>
+                  TITRE
+                </th>
+                <td mat-cell *matCellDef="let p">
+                  {{ p.book?.title }}
+                </td>
+              </ng-container>
+
+              <!-- ACTIONS -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>
+                  ACTIONS
+                </th>
+
+                <td mat-cell *matCellDef="let p" class="actions-cell">
+
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    (click)="edit(p)">
+
+                    Modifier
+
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="delete(p.publishingId)">
+
+                    Supprimer
+
+                  </button>
+
+                </td>
+              </ng-container>
+
+              <!-- ROWS -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+
+            <!-- CREATE BUTTON -->
+            <div class="table-actions-bar">
+
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="openCreate()">
+
+                Créer Publication
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+        <!-- CENTERED PAGINATOR -->
+            <div class="custom-paginator">
+
+            <button
+              class="nav-btn"
+              (click)="paginator.previousPage()"
+              [disabled]="!paginator.hasPreviousPage()">
+
+              ◀
+            </button>
+
+            <span class="page-label">
+              Page {{ paginator.pageIndex + 1 }} / {{ paginator.getNumberOfPages() }}
+            </span>
+
+            <button
+              class="nav-btn"
+              (click)="paginator.nextPage()"
+              [disabled]="!paginator.hasNextPage()">
+
+              ▶
+            </button>
+
+          </div>
+
+            <mat-paginator
+              #paginator
+              [pageSize]="5"
+              [hidePageSize]="true">
+            </mat-paginator>
+     </div>
+  </div>
+
+    </mat-sidenav-content>
+
+    <!-- RIGHT DRAWER -->
+    <mat-sidenav
+      mode="over"
+      position="end"
+      [(opened)]="showForm"
+      class="drawer">
+
+      <h3>
+        {{ selectedPublishing ? 'Modifier Publication' : 'Créer Publication' }}
+      </h3>
+
+      <label>Nom</label>
+      <input [(ngModel)]="formPublishing.name">
+
+      <label>ISBN</label>
+      <input
+          [(ngModel)]="formPublishing.isbn"
+          maxlength="13"
+          pattern="^[0-9]{13}$"
+          required>
+
+      <label>Prix HT</label>
+      <input type="number" [(ngModel)]="formPublishing.noTprice">
+
+      <label>Royalties</label>
+      <input type="number" [(ngModel)]="formPublishing.royalties">
+
+      <label>Livre</label>
+      <select [(ngModel)]="selectedBookId">
+        <option [ngValue]="null">-- Sélectionner un livre --</option>
+        <option *ngFor="let b of books" [ngValue]="b.id">
+          {{ b.title }}
+        </option>
+      </select>
+
+      <div class="actions">
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="selectedPublishing ? update() : create()">
+
+          {{ selectedPublishing ? 'Modifier' : 'Créer' }}
+
+        </button>
+
+        <button
+          mat-button
+          (click)="cancel()">
+
+          Annuler
+
+        </button>
+
+      </div>
+
+    </mat-sidenav>
+
+  </mat-sidenav-container>
+</div>

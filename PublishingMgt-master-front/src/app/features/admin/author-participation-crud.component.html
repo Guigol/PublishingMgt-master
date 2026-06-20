@@ -1,0 +1,143 @@
+<h2>Participation Auteur</h2>
+
+<div class="actions">
+
+  <button (click)="setSort('author')">
+    Trie par Auteur
+  </button>
+
+  <button (click)="setSort('book')">
+    Trie par Livre
+  </button>
+
+  <!-- SEARCH BAR SAME LINE -->
+  <input
+    *ngIf="sortMode === 'author'"
+    type="text"
+    class="search-input"
+    placeholder="Rechercher par auteur..."
+    [(ngModel)]="searchAuthor"
+    (input)="applyView()"
+  />
+
+  <input
+    *ngIf="sortMode === 'book'"
+    type="text"
+    class="search-input"
+    placeholder="Rechercher par livre..."
+    [(ngModel)]="searchBook"
+    (input)="applyView()"
+  />
+
+</div>
+
+<div *ngIf="loading" class="loading">
+  Loading...
+</div>
+
+<div *ngIf="error" class="error-box">
+  {{ error }}
+</div>
+
+<!-- =========================
+     VIEW: SORT BY AUTHOR
+========================= -->
+<div *ngIf="sortMode === 'author'">
+
+  <table>
+    <tr>
+      <th>Auteur</th>
+      <th>Livre</th>
+      <th>% Royalties</th>
+    </tr>
+
+      <tr *ngFor="let p of paginatedAuthorParticipations">
+      <td>{{ p.authorName }}</td>
+      <td>{{ p.bookTitle }}</td>
+      <td>{{ p.pctRateRoyalties * 100 }} %</td>
+    </tr>
+  </table>
+
+  <!-- Paginator -->
+  <div
+    class="paginator"
+    *ngIf="authorTotalPages > 1"
+  >
+
+    <button
+      class="pagin"
+      (click)="previousAuthorPage()"
+      [disabled]="authorCurrentPage === 1"
+    >
+      ◀
+    </button>
+
+    <span>
+      Page {{ authorCurrentPage }} / {{ authorTotalPages }}
+    </span>
+
+    <button
+      class="pagin"
+      (click)="nextAuthorPage()"
+      [disabled]="authorCurrentPage === authorTotalPages"
+    >
+      ▶
+    </button>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     VIEW: GROUP BY BOOK
+========================= -->
+<div *ngIf="sortMode === 'book'">
+
+  <div
+    *ngFor="let g of paginatedGrouped"
+    class="book-group"
+  >
+    <h3>{{ g.bookTitle }}</h3>
+
+    <table>
+      <tr>
+        <th>Auteur</th>
+        <th>Rate %</th>
+      </tr>
+
+      <tr *ngFor="let p of g.items">
+        <td>{{ p.authorName }}</td>
+        <td>{{ p.pctRateRoyalties * 100 }} %</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Book Paginator -->
+  <div
+    class="paginator"
+    *ngIf="totalPages > 1"
+  >
+
+    <button
+      class="pagin"
+      (click)="previousPage()"
+      [disabled]="currentPage === 1"
+    >
+       ◀
+    </button>
+
+    <span>
+      Page {{ currentPage }} / {{ totalPages }}
+    </span>
+
+    <button
+      class="pagin"
+      (click)="nextPage()"
+      [disabled]="currentPage === totalPages"
+    >
+      ▶
+    </button>
+
+  </div>
+
+</div>

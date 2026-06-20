@@ -1,0 +1,112 @@
+<div class="table-page">
+  <h2>Auteurs</h2>
+
+  <mat-sidenav-container class="container">
+
+    <!-- LEFT CONTENT -->
+    <mat-sidenav-content class="content">
+
+      <div class="page">
+
+        <!-- TABLE -->
+        <div class="table-center">
+
+          <div class="table-wrapper">
+
+             <div class="search-bar">
+
+                <input
+                type="text"
+                placeholder="ID / prénom / nom"
+                (keyup)="applyFilter($event)">
+
+            </div>
+
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+              <!-- AUTHOR ID -->
+              <ng-container matColumnDef="authorId">
+                <th mat-header-cell *matHeaderCellDef>
+                  ID_AUTEUR
+                </th>
+                <td mat-cell *matCellDef="let author">
+                  {{ author.authorId }}
+                </td>
+              </ng-container>
+
+              <!-- FIRSTNAME -->
+              <ng-container matColumnDef="firstname">
+                <th mat-header-cell *matHeaderCellDef>
+                  PRENOM
+                </th>
+                <td mat-cell *matCellDef="let author">
+                  {{ author.firstname }}
+                </td>
+              </ng-container>
+
+              <!-- SURNAME -->
+              <ng-container matColumnDef="surname">
+                <th mat-header-cell *matHeaderCellDef>
+                  NOM
+                </th>
+                <td mat-cell *matCellDef="let author">
+                  {{ author.surname }}
+                </td>
+              </ng-container>
+
+              <!-- ROWS -->
+              <tr
+                mat-header-row
+                *matHeaderRowDef="displayedColumns">
+              </tr>
+
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns;">
+              </tr>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CENTERED PAGINATOR -->
+      <div class="custom-paginator">
+
+        <button
+          class="nav-btn"
+          (click)="paginator.previousPage()"
+          [disabled]="!paginator.hasPreviousPage()">
+
+          ◀
+        </button>
+
+        <span class="page-label">
+          Page {{ paginator.pageIndex + 1 }} / {{ paginator.getNumberOfPages() }}
+        </span>
+
+        <button
+          class="nav-btn"
+          (click)="paginator.nextPage()"
+          [disabled]="!paginator.hasNextPage()">
+
+          ▶
+        </button>
+
+      </div>
+
+      <mat-paginator
+        #paginator
+        [pageSize]="4"
+        [hidePageSize]="true">
+      </mat-paginator>
+
+    </mat-sidenav-content>
+
+   
+  </mat-sidenav-container>
+</div>

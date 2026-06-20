@@ -1,0 +1,186 @@
+<div class="table-page">
+  <h2>Editeurs</h2>
+
+  <mat-sidenav-container class="container">
+
+    <!-- LEFT CONTENT -->
+    <mat-sidenav-content class="content">
+
+      <div class="page">
+
+        <!-- GLOBAL STATUS  -->
+          <div class="status-container">
+
+            <div *ngIf="successMessage" class="success">
+              {{ successMessage }}
+            </div>
+
+            <div *ngIf="error" class="error">
+              {{ error }}
+            </div>
+
+          </div>
+
+        <!-- TABLE -->
+        <div class="table-center">
+
+          <div class="table-wrapper">
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+              <!-- PUBLISHER ID -->
+              <ng-container matColumnDef="publisher_id">
+                <th mat-header-cell *matHeaderCellDef>
+                  EDITEUR_ID
+                </th>
+                <td mat-cell *matCellDef="let publisher">
+                  {{ publisher.publisher_id }}
+                </td>
+              </ng-container>
+
+              <!-- NAME -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>
+                  NOM EDITEUR
+                </th>
+                <td mat-cell *matCellDef="let publisher">
+                  {{ publisher.name }}
+                </td>
+              </ng-container>
+
+              <!-- ACTIONS -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>
+                  ACTIONS
+                </th>
+
+                <td mat-cell *matCellDef="let publisher" class="actions-cell">
+
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    (click)="edit(publisher)">
+
+                    Modifier
+
+                  </button>
+
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="delete(publisher.publisher_id)">
+
+                    Supprimer
+
+                  </button>
+
+                </td>
+              </ng-container>
+
+              <!-- ROWS -->
+              <tr
+                mat-header-row
+                *matHeaderRowDef="displayedColumns">
+              </tr>
+
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns;">
+              </tr>
+
+            </table>
+
+            <!-- CREATE BUTTON -->
+            <div class="table-actions-bar">
+
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="openCreate()">
+
+                Ajouter
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+       <!-- CENTERED PAGINATOR -->
+            <div class="custom-paginator">
+
+            <button
+              class="nav-btn"
+              (click)="paginator.previousPage()"
+              [disabled]="!paginator.hasPreviousPage()">
+
+              ◀
+            </button>
+
+            <span class="page-label">
+              Page {{ paginator.pageIndex + 1 }} / {{ paginator.getNumberOfPages() }}
+            </span>
+
+            <button
+              class="nav-btn"
+              (click)="paginator.nextPage()"
+              [disabled]="!paginator.hasNextPage()">
+
+              ▶
+            </button>
+
+          </div>
+
+      <mat-paginator
+        #paginator
+        [pageSize]="5"
+        [hidePageSize]="true">
+      </mat-paginator>
+
+    </mat-sidenav-content>
+
+    <!-- RIGHT DRAWER -->
+    <mat-sidenav
+      mode="over"
+      position="end"
+      [(opened)]="showForm"
+      class="drawer">
+
+      <h3>
+        {{ selectedPublisher ? 'Edit Publisher' : 'Ajouter Editeur' }}
+      </h3>
+
+      <label>Nom</label>
+      <input
+        type="text"
+        [(ngModel)]="formPublisher.name">
+
+      <div class="actions">
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="selectedPublisher ? update() : create()">
+
+          {{ selectedPublisher ? 'Update' : 'Ajouter' }}
+
+        </button>
+
+        <button
+          mat-button
+          (click)="cancel()">
+
+          Annuler
+
+        </button>
+
+      </div>
+
+    </mat-sidenav>
+
+  </mat-sidenav-container>
+</div>

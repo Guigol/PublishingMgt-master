@@ -1,0 +1,59 @@
+<app-navbar></app-navbar>
+
+<div class="dashboard">
+
+  <div class="author-entry">
+    <button routerLink="/author-dashboard">
+      Ouvrir Détails Royalties
+    </button>
+  </div>
+
+  <h2>Vue Auteur</h2>
+
+  <!-- YEAR FILTER -->
+  <div class="filters">
+    <label>Année :</label>
+
+    <select
+      [(ngModel)]="selectedYear"
+      (ngModelChange)="onYearChange()">
+      <option [ngValue]="2024">2024</option>
+      <option [ngValue]="2025">2025</option>
+      <option [ngValue]="2026">2026</option>
+    </select>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+
+    <div class="card">
+      <h3>Total vendus</h3>
+      <p>{{ totalSold }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Total royalties</h3>
+      <p>{{ totalAmount | number:'1.2-2' }} €</p>
+    </div>
+
+    <div class="card highlight">
+      <h3>Top livre</h3>
+      <p>{{ topBook }}</p>
+    </div>
+
+  </div>
+
+  <!-- GRAPH -->
+  <div class="graph-section">
+
+    <div class="chart-box">
+       <div class="chart-wrapper">
+      <h3>Évolution du chiffre d'affaires</h3>
+      <canvas baseChart
+        [data]="barChartData"
+        [type]="'bar'">
+      </canvas>
+      </div>
+    </div>
+
+</div>

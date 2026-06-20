@@ -1,0 +1,373 @@
+html {
+  scrollbar-gutter: stable;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  }
+
+h2 {
+  margin-top: 15px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 30px;
+}
+
+/* ===== SEARCH BAR===== */
+.search-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.search-bar input {
+  width: 220px;
+  padding: 10px 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fafafa;
+  outline: none;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.08);
+}
+
+.search-bar input:focus {
+  border-color: #024384;
+  background: white;
+}
+
+/* IMPORTANT : evoid overflows with Angular Material */
+mat-sidenav-container {
+   width: 100vw;
+   overflow: hidden;
+}
+
+/* ===== CENTER BOARD===== */
+
+.mat-header-cell {
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mat-cell {
+  text-align: center;
+  justify-content:center;
+}
+
+mat-sidenav-content.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  width: 100%;
+}
+
+/* GLOBAL ZONE */
+.table-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.table-center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+table.mat-table {
+  margin: 0;
+  width: auto;
+  display: table;
+}
+
+
+.table-wrapper {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.table-actions-bar {
+  display: flex;
+  justify-content: flex-end; 
+  width: 100%;
+  margin-top: 10px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+td.mat-footer-cell .actions-footer{
+  width: 100%;
+}
+
+/* =========================
+   TABLE ALIGN CENTER
+========================= */
+
+/* Headers */
+::ng-deep .mat-mdc-header-cell {
+  text-align: center !important;
+  justify-content: center !important;
+  font-weight: 600;
+}
+
+/* Values */
+::ng-deep .mat-mdc-cell {
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+/* Vertical centering */
+::ng-deep .mat-mdc-header-cell,
+::ng-deep .mat-mdc-cell {
+  vertical-align: middle !important;
+}
+
+/* paginator Angular Material */
+mat-paginator {
+  width: auto;
+ }
+
+/* CREATE BUTTON */
+.create-btn {
+  height: 36px;
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+/* actions */
+.mat-column-actions {
+  width: 160px;
+  text-align: center;
+}
+
+/* Header */
+th.mat-header-cell,
+td.mat-cell {
+ 
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== ACTIONS ===== */
+
+.actions-cell {
+  white-space: nowrap;
+  vertical-align: middle !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.actions-cell button {
+  min-width: 75px;
+  padding: 0 10px;
+  font-size: 13px;
+  height: 36px;
+  line-height: 36px;
+  margin-right: 8px;
+}
+
+.actions-cell button:last-child {
+  margin-right: 0;
+}
+
+/* ===== DRAWER ===== */
+
+mat-sidenav {
+  width: 380px;
+  padding: 20px;
+  background: #ffffff;
+  border-left: 1px solid #e0e0e0;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #dcdcdc;
+}
+
+mat-sidenav h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+mat-sidenav label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+}
+
+mat-sidenav input,
+mat-sidenav select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease;
+  background: #fafafa;
+}
+
+mat-sidenav input:focus,
+mat-sidenav select:focus {
+  border-color: #024384;
+  background: #fff;
+}
+
+/* Actions drawer */
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.actions button[color="primary"] {
+  background: #024384;
+  color: white;
+}
+
+.actions button:hover {
+  opacity: 0.9;
+}
+
+/* Shadow table */
+.mat-elevation-z8 {
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.08);
+}
+
+.status-container {
+  position: relative;
+  z-index: 9999;
+  margin-bottom: 10px;
+}
+
+/* Errors */
+
+.error {
+  color: red;
+  background: #ffe5e5;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.success {
+  color: green !important;
+  background: #e5ffe5;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+/* =========================
+   CUSTOM PAGINATOR
+========================= */
+
+/* Hide Angular paginator  */
+::ng-deep .mat-mdc-paginator {
+  display: none !important;
+}
+
+.custom-paginator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 20px;
+  }
+
+.page-label {
+  font-weight: 500;
+  color: #1e293b;
+  font-size: 15px;
+}
+
+/* Button */
+.nav-btn {
+  width: 38px;
+  height: 38px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: #024384;
+  color: white;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.nav-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(2, 67, 132, 0.3);
+}
+
+/* Disabled */
+.nav-btn:disabled {
+  background: #d1d5db;
+  color: #888;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+
+/* Responsive */
+@media (max-width: 900px) {
+  mat-sidenav {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .mat-column-averageDiscount,
+  .mat-column-quantityReturn {
+    display: none;
+  }
+
+  table.mat-table {
+    min-width: 700px;
+  }
+
+  /* Responsive */
+.table-center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* MOBILE wrapper scroll */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+/* table */
+table.mat-table {
+  min-width: 900px; 
+  width: auto;
+}
+
+/* paginator */
+mat-paginator {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+
+}

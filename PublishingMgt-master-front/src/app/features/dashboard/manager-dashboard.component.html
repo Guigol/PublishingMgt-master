@@ -1,0 +1,23 @@
+<app-navbar></app-navbar>
+
+
+<div class="admin-dashboard-container">
+  
+ <mat-card class="menu-card mat-elevation-z3">
+<nav class="manager-menu">
+
+  
+  <a mat-raised-button color="accent" routerLink="authors" routerLinkActive="active-link">Auteurs</a>
+      <a mat-raised-button color="primary" routerLink="books" routerLinkActive="active-link">Livres</a>
+      <a mat-raised-button color="accent" routerLink="publishers" routerLinkActive="active-link">Editeurs</a>
+      <a mat-raised-button color="primary" routerLink="publishing" routerLinkActive="active-link">Publication</a>
+      <a mat-raised-button color="accent" routerLink="booksales" routerLinkActive="active-link">Ventes Livres</a>
+      <a mat-raised-button color="primary" routerLink="authorparticipation" routerLinkActive="active-link">Participation Auteur</a>
+      <a mat-raised-button color="warn" routerLink="royalties" routerLinkActive="active-link">Royalties</a>
+</nav>
+ </mat-card>
+
+ <div class="content-section">
+    <router-outlet></router-outlet>
+  </div>
+</div>

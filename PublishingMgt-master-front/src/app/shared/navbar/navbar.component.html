@@ -1,0 +1,156 @@
+<mat-toolbar class="custom-toolbar">
+
+  <!-- Logo / Title -->
+  <span class="logo">
+    <mat-icon>dashboard</mat-icon>
+    Sky - Royalties
+  </span>
+
+  <span class="spacer"></span>
+
+  <!-- ================= DESKTOP ================= -->
+  <span *ngIf="user$ | async as user" class="user-section desktop-only">
+
+    <!-- Infos -->
+    <span class="user-info">
+      <mat-icon>account_circle</mat-icon>
+      Connecté : <b>{{ user.login }}</b>
+      ({{ user.role }})
+    </span>
+
+    <!-- ================= ADMIN ================= -->
+    <ng-container *ngIf="user.role === 'ADMIN'">
+
+      <button mat-button routerLink="/admin-overview" routerLinkActive="active-link">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Vue Admin
+      </button>
+
+      <button mat-button routerLink="/admin-dashboard" routerLinkActive="active-link">
+        <mat-icon>settings</mat-icon>
+        Gestion Admin
+      </button>
+
+    </ng-container>
+
+    <!-- ================= MANAGER ================= -->
+    <ng-container *ngIf="user.role === 'MANAGER'">
+
+      <button mat-button routerLink="/mgr-overview" routerLinkActive="active-link">
+        <mat-icon>supervisor_account</mat-icon>
+        Vue Manager
+      </button>
+
+      <button mat-button routerLink="/manager-dashboard" routerLinkActive="active-link">
+        <mat-icon>manage_accounts</mat-icon>
+        Gestion Manager
+      </button>
+
+    </ng-container>
+
+    <!-- ================= USER ================= -->
+    <ng-container *ngIf="user.role === 'USER'">
+
+      <button mat-button routerLink="/user-overview" routerLinkActive="active-link">
+        <mat-icon>menu_book</mat-icon>
+        Vue Synthèse
+      </button>
+
+      <button mat-button routerLink="/user-dashboard" routerLinkActive="active-link">
+        <mat-icon>library_books</mat-icon>
+        Détails Livre
+      </button>
+
+    </ng-container>
+
+    <!-- ================= AUTHOR ================= -->
+    <ng-container *ngIf="user.role === 'AUTHOR'">
+
+      <button mat-button routerLink="/author-overview" routerLinkActive="active-link">
+        <mat-icon>edit_note</mat-icon>
+        Vue Auteur
+      </button>
+
+      <button mat-button routerLink="/author-dashboard" routerLinkActive="active-link">
+        <mat-icon>payments</mat-icon>
+        Détails Royalties
+      </button>
+
+    </ng-container>
+
+    <!-- Logout -->
+    <button
+      mat-raised-button
+      color="warn"
+      (click)="logout()"
+      class="logout-btn">
+
+      <mat-icon>logout</mat-icon>
+      Logout
+
+    </button>
+
+  </span>
+
+  <!-- ================= MOBILE HAMBURGER ================= -->
+  <span *ngIf="user$ | async as user" class="mobile-only">
+
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+
+      <!-- USER INFO -->
+      <button mat-menu-item disabled>
+        <mat-icon>account_circle</mat-icon>
+        {{ user.login }} ({{ user.role }})
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <!-- ADMIN -->
+      <ng-container *ngIf="user.role === 'ADMIN'">
+
+        <button mat-menu-item routerLink="/admin-overview">Vue Admin</button>
+        <button mat-menu-item routerLink="/admin-dashboard">Gestion Admin</button>
+
+      </ng-container>
+
+      <!-- MANAGER -->
+      <ng-container *ngIf="user.role === 'MANAGER'">
+
+        <button mat-menu-item routerLink="/mgr-overview">Vue Manager</button>
+        <button mat-menu-item routerLink="/manager-dashboard">Gestion Manager</button>
+
+      </ng-container>
+
+      <!-- USER -->
+      <ng-container *ngIf="user.role === 'USER'">
+
+        <button mat-menu-item routerLink="/user-overview">Vue Synthèse</button>
+        <button mat-menu-item routerLink="/user-dashboard">Détails Livre</button>
+
+      </ng-container>
+
+      <!-- AUTHOR -->
+      <ng-container *ngIf="user.role === 'AUTHOR'">
+
+        <button mat-menu-item routerLink="/author-overview">Vue Auteur</button>
+        <button mat-menu-item routerLink="/author-dashboard">Détails Royalties</button>
+
+      </ng-container>
+
+      <mat-divider></mat-divider>
+
+      <!-- LOGOUT -->
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+
+    </mat-menu>
+
+  </span>
+
+</mat-toolbar>

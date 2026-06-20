@@ -1,0 +1,23 @@
+<div class="home-hero">
+
+  <div class="overlay">
+
+    <div class="hero-content">
+
+      <h1 class="title">SKY ROYALTIES</h1>
+
+      <div class="center-button">
+        <button (click)="showLogin = true" class="login-btn">
+          Se connecter
+        </button>
+      </div>
+
+      @if (showLogin) {
+        <app-login></app-login>
+      }
+
+    </div>
+
+  </div>
+
+</div>

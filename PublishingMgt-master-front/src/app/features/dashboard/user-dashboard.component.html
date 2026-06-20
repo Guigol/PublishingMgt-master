@@ -1,0 +1,140 @@
+<app-navbar></app-navbar>
+
+<div class="table-page">
+
+  <h2>Ventes des livres</h2>
+
+  <mat-sidenav-container class="container">
+
+    <mat-sidenav-content class="content">
+
+      <div class="page">
+
+        <!-- SEARCH BAR -->
+        <div class="search-bar">
+
+          <input
+            type="text"
+            placeholder="Recherche Livre"
+            [(ngModel)]="search.book"
+            (input)="applyFilters()"
+          >
+
+          <input
+            type="text"
+            placeholder="Recherche Publication"
+            [(ngModel)]="search.publishing"
+            (input)="applyFilters()"
+          >
+
+          <input
+            type="text"
+            placeholder="Recherche ISBN"
+            [(ngModel)]="search.isbn"
+            (input)="applyFilters()"
+          >
+
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-center">
+          <div class="table-wrapper">
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+              <!-- ID -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef>ID_V</th>
+                <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+              </ng-container>
+
+              <!-- BOOK -->
+              <ng-container matColumnDef="book">
+                <th mat-header-cell *matHeaderCellDef>Livre</th>
+                <td mat-cell *matCellDef="let row">{{ row.book?.title }}</td>
+              </ng-container>
+
+              <!-- PUBLISHING -->
+              <ng-container matColumnDef="publishing">
+                <th mat-header-cell *matHeaderCellDef>Publication</th>
+                <td mat-cell *matCellDef="let row">{{ row.publishing?.name }}</td>
+              </ng-container>
+
+              <!-- MONTH -->
+              <ng-container matColumnDef="month">
+                <th mat-header-cell *matHeaderCellDef>Mois</th>
+                <td mat-cell *matCellDef="let row">{{ getMonthName(row.month) }}</td>
+              </ng-container>
+
+              <!-- YEAR -->
+              <ng-container matColumnDef="year">
+                <th mat-header-cell *matHeaderCellDef>Année</th>
+                <td mat-cell *matCellDef="let row">{{ row.year }}</td>
+              </ng-container>
+
+              <!-- SOLD -->
+              <ng-container matColumnDef="quantitySold">
+                <th mat-header-cell *matHeaderCellDef>Ventes</th>
+                <td mat-cell *matCellDef="let row">{{ row.quantitySold }}</td>
+              </ng-container>
+
+              <!-- RETURN -->
+              <ng-container matColumnDef="quantityReturn">
+                <th mat-header-cell *matHeaderCellDef>Retours</th>
+                <td mat-cell *matCellDef="let row">{{ row.quantityReturn }}</td>
+              </ng-container>
+
+              <!-- DISCOUNT -->
+              <ng-container matColumnDef="averageDiscount">
+                <th mat-header-cell *matHeaderCellDef>Réduction</th>
+                <td mat-cell *matCellDef="let row">{{ row.averageDiscount }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+
+          </div>
+        </div>
+
+      </div>
+
+       <!-- PAGINATOR -->
+        <div class="custom-paginator">
+
+          <button
+            class="nav-btn"
+            (click)="detailsPaginator.previousPage()"
+            [disabled]="!detailsPaginator.hasPreviousPage()"
+          >
+            ◀
+          </button>
+
+          <span class="page-label">
+            Page {{ detailsPaginator.pageIndex + 1 }}
+            /
+            {{ detailsPaginator.getNumberOfPages() }}
+          </span>
+
+          <button
+            class="nav-btn"
+            (click)="detailsPaginator.nextPage()"
+            [disabled]="!detailsPaginator.hasNextPage()"
+          >
+            ▶
+          </button>
+
+        </div>
+
+        <mat-paginator
+          #detailsPaginator
+          [pageSize]="5"
+          [hidePageSize]="true">
+        </mat-paginator>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+</div>
