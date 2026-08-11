@@ -31,7 +31,7 @@ Complete solution for calculating author royalties by book, year, and month. It 
 - H2 console
 - MySql
 - json
-- Jupiter (Tests)
+- JUnit 5 (Tests)
 
 **🎨 Front-end**
 
@@ -40,8 +40,6 @@ Complete solution for calculating author royalties by book, year, and month. It 
 - TypeScript : 5.9.2
 - cypress (e2e test) : 15.17.0
 - jasmine-core (unit tests) : 6.3.0
-- Cypress (e2e tests)
-- Jasmine-Karma (Unit tests)
 
 
 ---

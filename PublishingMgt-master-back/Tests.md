@@ -34,8 +34,9 @@ Those tests ensure that:
 ## 👉 Tests location
 
 ### Stack : 
-- Jupiter Api Test
-- SpringBootTest
+- JUnit 5
+- SpringBoot-Security-Test 6.5
+
 ### The tests are located in :
 `PublishingMgt-master-back/src/test/java/com/publ/PublishingMgt_master`
 
